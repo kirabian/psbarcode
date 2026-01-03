@@ -68,7 +68,7 @@
 
             @php
                 $fields = [
-                    ['label' => 'EID', 'key' => 'eid', 'width' => '94%', 'height' => 50, 'scale' => 1.4],
+                    ['label' => 'EID', 'key' => 'eid', 'width' => '94%', 'height' => 55, 'scale' => 1.8],
                     ['label' => 'IMEI', 'key' => 'imei1', 'width' => '65%', 'height' => 55, 'scale' => 2.8],
                     ['label' => 'IMEI2', 'key' => 'imei2', 'width' => '65%', 'height' => 55, 'scale' => 2.8],
                     ['label' => 'MEID', 'key' => 'meid', 'width' => '50%', 'height' => 55, 'scale' => 2.8],
@@ -81,13 +81,13 @@
                 <div style="width: 100%; height: 20px; margin-bottom: 12px;">
                     <svg width="100%" height="20">
                         <text x="50%" y="15" font-family="sans-serif" font-size="13" font-weight="500" fill="{{ $labelColor }}" text-anchor="middle">
-                            {{ $field['label'] }} {{ $item[$field['key']] }}
+                            {{ $field['label'] }} {{ substr($item[$field['key']] ?? '89049032005008882600082794302879', 0, 32) }}
                         </text>
                     </svg>
                 </div>
 
-                <div style="background-color: #ffffff; padding: 6px 10px; width: {{ $field['width'] }}; display: flex; justify-content: center; border-radius: 2px;">
-                    <svg class="barcode-svg" data-value="{{ $item[$field['key']] }}" data-format="CODE128" data-height="{{ $field['height'] }}" data-width="{{ $field['scale'] }}" data-displayValue="false" data-margin="0"></svg>
+                <div style="background-color: #ffffff; padding: 8px 6px; width: {{ $field['width'] }}; display: flex; justify-content: center; border-radius: 2px;">
+                    <svg class="barcode-svg" data-value="{{ substr($item[$field['key']] ?? '89049032005008882600082794302879', 0, 32) }}" data-format="CODE128" data-height="{{ $field['height'] }}" data-width="{{ $field['scale'] }}" data-displayValue="false" data-margin="0"></svg>
                 </div>
             </div>
             @endforeach
