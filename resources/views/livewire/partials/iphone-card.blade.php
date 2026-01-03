@@ -68,9 +68,9 @@
 
             @php
                 $fields = [
-                    ['label' => 'EID', 'key' => 'eid', 'width' => '88%', 'height' => 55, 'scale' => 2.0],
-                    ['label' => 'IMEI', 'key' => 'imei1', 'width' => '60%', 'height' => 55, 'scale' => 2.8],
-                    ['label' => 'IMEI2', 'key' => 'imei2', 'width' => '60%', 'height' => 55, 'scale' => 2.8],
+                    ['label' => 'EID', 'key' => 'eid', 'width' => '94%', 'height' => 50, 'scale' => 1.4],
+                    ['label' => 'IMEI', 'key' => 'imei1', 'width' => '65%', 'height' => 55, 'scale' => 2.8],
+                    ['label' => 'IMEI2', 'key' => 'imei2', 'width' => '65%', 'height' => 55, 'scale' => 2.8],
                     ['label' => 'MEID', 'key' => 'meid', 'width' => '50%', 'height' => 55, 'scale' => 2.8],
                 ];
             @endphp
@@ -86,7 +86,7 @@
                     </svg>
                 </div>
 
-                <div style="background-color: #ffffff; padding: 8px 12px; width: {{ $field['width'] }}; display: flex; justify-content: center; border-radius: 2px;">
+                <div style="background-color: #ffffff; padding: 6px 10px; width: {{ $field['width'] }}; display: flex; justify-content: center; border-radius: 2px;">
                     <svg class="barcode-svg" data-value="{{ $item[$field['key']] }}" data-format="CODE128" data-height="{{ $field['height'] }}" data-width="{{ $field['scale'] }}" data-displayValue="false" data-margin="0"></svg>
                 </div>
             </div>
