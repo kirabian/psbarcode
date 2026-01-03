@@ -87,7 +87,7 @@
                 </div>
 
                 <div style="background-color: #ffffff; padding: 8px 6px; width: {{ $field['width'] }}; display: flex; justify-content: center; border-radius: 2px;">
-                    <svg class="barcode-svg" data-value="{{ substr($item[$field['key']] ?? '89049032005008882600082794302879', 0, 32) }}" data-format="CODE128" data-height="{{ $field['height'] }}" data-width="{{ $field['scale'] }}" data-displayValue="false" data-margin="0"></svg>
+                    <svg class="barcode-svg" data-value="{{ substr($item[$field['key']] ?? '89049032005008882600082794302879', 0, 50) }}" data-format="CODE128" data-height="{{ $field['height'] }}" data-width="{{ $field['scale'] }}" data-displayValue="false" data-margin="0"></svg>
                 </div>
             </div>
             @endforeach
