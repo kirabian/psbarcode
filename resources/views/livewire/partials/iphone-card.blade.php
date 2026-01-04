@@ -11,7 +11,7 @@
     // Warna Kotak Kecil di atas (Abu-abu iOS)
     $notchBoxColor = $isDark ? '#3a3a3c' : '#d1d1d6';
 
-    // Pengaturan Frame Fisik: Dibuat Lebih Tipis
+    // Pengaturan Frame Fisik: Light = Putih (#ffffff), Dark = Hitam (#000000)
     $frameColor = $isDark ? '#000000' : '#ffffff';
     $outerBorder = $isDark ? '#000000' : '#eeeeee';
 
@@ -37,11 +37,11 @@
 
 <div class="iphone-container" style="display: inline-block; background: transparent; padding: 0; margin: 0;">
     <div class="iphone-physical-frame" style="
-        width: 379px; 
-        height: 816px; 
+        width: 383px; 
+        height: 820px; 
         background-color: {{ $frameColor }}; 
         border-radius: 50px; 
-        padding: 2px; 
+        padding: 4px; 
         position: relative; 
         display: flex; 
         align-items: center; 
@@ -52,7 +52,7 @@
     ">
         <div id="{{ $id }}" class="iphone-screen" style="width: 375px; height: 812px; background-color: {{ $bgMain }}; color: {{ $textColor }}; font-family: -apple-system, BlinkMacSystemFont, sans-serif; position: relative; overflow: hidden; flex-shrink: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; border-radius: 46px;">
             
-            <div style="display: flex; justify-content: space-between; padding: 8px 26px 0 26px; align-items: center; height: 44px; position: absolute; top: 0; left: 0; width: 100%; z-index: 50; box-sizing: border-box;">
+            <div style="display: flex; justify-content: space-between; padding: 14px 26px 0 26px; align-items: center; height: 44px; position: absolute; top: 0; left: 0; width: 100%; z-index: 50; box-sizing: border-box;">
                 <div style="font-weight: 600; font-size: 15px; width: 54px; text-align: left; color: {{ $headerColor }};">
                     <svg width="60" height="20">
                         <text x="0" y="15" font-family="sans-serif" font-size="15" font-weight="600" fill="{{ $headerColor }}">{{ $item['hour'] }}:{{ $item['minute'] }}</text>
