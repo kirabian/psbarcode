@@ -121,8 +121,8 @@ function downloadCleanImage(id) {
         scrollY: -window.scrollY, // Fix posisi jika user sedang scrolling
     }).then(canvas => {
         const link = document.createElement('a');
-        link.download = 'PSTORE-DeviceInfo-' + id + '.jpg';
-        link.href = canvas.toDataURL('image/jpeg', 0.9);
+        link.download = 'PSTORE-DeviceInfo-' + id + '.png';
+        link.href = canvas.toDataURL('image/png');
         link.click();
     });
 }
