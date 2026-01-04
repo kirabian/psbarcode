@@ -7,9 +7,11 @@
     $headerColor = $isDark ? '#ffffff' : '#000000'; 
     $labelColor = $isDark ? '#ffffff' : '#000000';
 
+    // Warna Jaringan Tetap Abu-abu
+    $signalGray = '#6e6d6d';
+
     // Logika Warna Baterai Random (Merah, Kuning/Hemat Daya, Hijau)
     $battLevel = $item['batteryLevel'] ?? rand(10, 100);
-    $useWifi = rand(0, 1); // Random wifi ON/OFF
     $isLow = $battLevel < 20;
     $isSaving = rand(0, 1); // Random Mode Hemat Daya
     
@@ -40,17 +42,9 @@
         <div style="display: flex; gap: 7px; align-items: center; margin-top: -12px;">
             <div style="display: flex; gap: 2.5px; align-items: center;">
                 @for($i=1; $i<=4; $i++)
-                    <div style="width: 3px; height: 3px; background-color: {{ $headerColor }}; border-radius: 50%; opacity: {{ ($item['signalStrength'] ?? 4) >= $i ? '1' : '0.2' }};"></div>
+                    <div style="width: 3px; height: 3px; background-color: {{ $signalGray }}; border-radius: 50%; opacity: {{ ($item['signalStrength'] ?? 4) >= $i ? '1' : '0.2' }};"></div>
                 @endfor
             </div>
-
-            @if($useWifi)
-            <svg width="17" height="12" viewBox="0 0 17 12" fill="{{ $headerColor }}">
-                <path d="M8.5 12L6.5 9.5H10.5L8.5 12Z"/>
-                <path opacity="{{ ($item['wifiLevel'] ?? 3) >= 2 ? '1' : '0.3' }}" d="M8.5 4.5C6.6 4.5 4.9 5.2 3.6 6.4L5 7.8C5.9 7 7.1 6.5 8.5 6.5C9.9 6.5 11.1 7 12 7.8L13.4 6.4C12.1 5.2 10.4 4.5 8.5 4.5Z"/>
-                <path opacity="{{ ($item['wifiLevel'] ?? 3) >= 3 ? '1' : '0.3' }}" d="M8.5 0.5C5.3 0.5 2.3 1.8 0.3 4L1.7 5.4C3.4 3.7 5.8 2.5 8.5 2.5C11.2 2.5 13.6 3.7 15.3 5.4L16.7 4C14.7 1.8 11.7 0.5 8.5 0.5Z"/>
-            </svg>
-            @endif
 
             <div style="position: relative; width: 25px; height: 12px;">
                 <svg width="25" height="12" viewBox="0 0 25 12">
