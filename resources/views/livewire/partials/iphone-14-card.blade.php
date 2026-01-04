@@ -5,7 +5,7 @@
     $textColor = $isDark ? '#ffffff' : '#000000';
     $headerColor = $isDark ? '#ffffff' : '#000000';
     $wifiColor = '#ffffff';
-    $signalColor = '#6e6d6d';
+    $signalColor = '#6e6d6d'; // Dikunci abu-abu
     $labelColor = $isDark ? '#8E8E93' : '#6e6e73';
     $closeBtnBg = $isDark ? '#1c1c1e' : '#ffffff';
     $closeIcon = $isDark ? '#ffffff' : '#3c3c43';
@@ -24,9 +24,9 @@
     }
     $battTextColor = '#ffffff';
 
-    // Logika WiFi Random (Probabilitas 50/50 muncul atau tidak)
-    $showWifi = $item['showWifi'] ?? (mt_rand(0, 1) == 1);
-    $wifiLevel = $item['wifiLevel'] ?? mt_rand(1, 3);
+    // Logika WiFi Random dinonaktifkan (WiFi Hilang)
+    $showWifi = false; 
+    $wifiLevel = 0;
 
     $randomEid = $item['eid'] ?? '';
     if (strlen($randomEid) < 33) {
