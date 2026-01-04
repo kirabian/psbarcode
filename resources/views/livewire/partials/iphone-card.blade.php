@@ -28,9 +28,9 @@
     }
 @endphp
 
-<div id="{{ $id }}" class="iphone-screen" style="width: 375px; height: 812px; background-color: {{ $bgMain }}; color: {{ $textColor }}; font-family: -apple-system, BlinkMacSystemFont, sans-serif; position: relative; overflow: hidden; flex-shrink: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; border-radius: 55px;">
+<div id="{{ $id }}" class="iphone-screen" style="width: 375px; height: 812px; background-color: {{ $bgMain }}; color: {{ $textColor }}; font-family: -apple-system, BlinkMacSystemFont, sans-serif; position: relative; overflow: hidden; flex-shrink: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; border-radius: 55px; border: none;">
     
-    <div style="display: flex; justify-content: space-between; padding: 14px 26px 0 26px; align-items: center; height: 44px; position: absolute; top: 0; left: 0; width: 100%; z-index: 50; box-sizing: border-box;">
+    <div style="display: flex; justify-content: space-between; padding: 8px 26px 0 26px; align-items: center; height: 44px; position: absolute; top: 0; left: 0; width: 100%; z-index: 150; box-sizing: border-box;">
         <div style="font-weight: 600; font-size: 15px; width: 54px; text-align: left; color: {{ $headerColor }};">
             <svg width="60" height="20">
                 <text x="15" y="15" font-family="sans-serif" font-size="15" font-weight="600" fill="{{ $headerColor }}">{{ $item['hour'] }}:{{ $item['minute'] }}</text>
@@ -53,7 +53,7 @@
             <div style="position: relative; width: 25px; height: 12px;">
                 <svg width="25" height="12" viewBox="0 0 25 12">
                     <rect x="0.5" y="0.5" width="21" height="11" rx="2.5" stroke="{{ $headerColor }}" stroke-width="1" fill="none" opacity="0.35"/>
-                    <path d="M22.5 4C23.3 4 24 4.67 24 5.5V6.5C24 7.33 23.3 8 22.5 8V4Z" fill="{{ $headerColor }}" opacity="0.35"/>
+                    <path d="M22.5 4C23.3 4 24 4.67 24 5.5V6.5C24 8.33 23.3 9 22.5 9V4Z" fill="{{ $headerColor }}" opacity="0.35"/>
                     <rect x="2" y="2" width="{{ $item['battWidth'] ?? 19 }}" height="8" rx="1.5" fill="{{ $battFillColor }}"/>
                     <text x="11" y="6.5" font-family="sans-serif" font-size="6.5" font-weight="700" fill="{{ $battTextColor }}" text-anchor="middle" dominant-baseline="middle">{{ $item['batteryLevel'] }}</text>
                 </svg>
