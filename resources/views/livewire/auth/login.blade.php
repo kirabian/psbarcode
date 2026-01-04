@@ -1,106 +1,65 @@
-<div class="min-h-screen flex items-center justify-center bg-slate-100 font-sans">
-    <div class="max-w-md w-full bg-white rounded-2xl shadow-2xl overflow-hidden border border-slate-200">
-        <div class="bg-blue-600 p-8 text-center text-white">
-            <h1 class="text-3xl font-black tracking-tighter italic">PSTORE <span class="font-light not-italic">IMEI</span></h1>
-            <p class="text-blue-100 text-sm mt-2">Internal Management System v1.0</p>
-        </div>
+<div class="min-h-screen flex items-center justify-center bg-[#F8FAFC] font-sans p-6">
+    <div class="max-w-[440px] w-full">
         
-        <div class="p-8">
+        <div class="text-center mb-10">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-indigo-600 rounded-2xl mb-4 shadow-xl shadow-indigo-100">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A10.003 10.003 0 0012 3a10.003 10.003 0 00-7.306 3.148m0 0l.058.058m0 0a10.053 10.053 0 00-3.148 7.306 10.053 10.053 0 003.148 7.306m0 0l.058.058m0 0l.058.058m1.306-1.306a10.053 10.053 0 007.306 3.148 10.053 10.053 0 007.306-3.148m0 0l.058-.058m0 0a10.053 10.053 0 003.148-7.306 10.053 10.053 0 00-3.148-7.306m0 0l-.058-.058m0-0a10.053 10.053 0 00-7.306-3.148 10.053 10.053 0 00-7.306 3.148" />
+                </svg>
+            </div>
+            <h1 class="text-2xl font-bold text-slate-900 tracking-tight">NEXUS<span class="text-indigo-600">CORE</span></h1>
+            <p class="text-slate-500 text-sm mt-1">Centralized Management Ecosystem</p>
+        </div>
+
+        <div class="bg-white rounded-[24px] shadow-sm border border-slate-200 p-10">
             @if (session()->has('error'))
-                <div class="mb-4 p-3 bg-red-100 border-l-4 border-red-500 text-red-700 text-sm font-bold">
-                    {{ session('error') }}
+                <div class="mb-6 p-4 bg-red-50 rounded-xl border border-red-100 flex items-center gap-3 text-red-600 text-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                    </svg>
+                    <span class="font-medium">{{ session('error') }}</span>
                 </div>
             @endif
 
-            <form wire:submit.prevent="login">
-                <div class="mb-5">
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">ID Login</label>
-                    <input type="text" wire:model.defer="id_login" 
-                        class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" 
-                        placeholder="Masukkan ID Anda">
+            <form wire:submit.prevent="login" class="space-y-6">
+                <div>
+                    <label class="block text-[13px] font-semibold text-slate-700 mb-2 ml-1">Identity ID</label>
+                    <div class="relative">
+                        <input type="text" wire:model.defer="id_login" 
+                            class="w-full bg-slate-50 px-4 py-3.5 rounded-xl border border-slate-200 focus:bg-white focus:ring-4 focus:ring-indigo-50 focus:border-indigo-500 outline-none transition-all duration-200 placeholder:text-slate-400" 
+                            placeholder="Enter your unique ID">
+                    </div>
                 </div>
 
-                <div class="mb-8">
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Password</label>
+                <div>
+                    <div class="flex justify-between items-center mb-2 ml-1">
+                        <label class="text-[13px] font-semibold text-slate-700">Security Key</label>
+                        <a href="#" class="text-[12px] font-medium text-indigo-600 hover:text-indigo-700 transition">Forgot?</a>
+                    </div>
                     <input type="password" wire:model.defer="password" 
-                        class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" 
+                        class="w-full bg-slate-50 px-4 py-3.5 rounded-xl border border-slate-200 focus:bg-white focus:ring-4 focus:ring-indigo-50 focus:border-indigo-500 outline-none transition-all duration-200 placeholder:text-slate-400" 
                         placeholder="••••••••">
                 </div>
 
                 <button type="submit" wire:loading.attr="disabled"
-                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-200 transition-all transform active:scale-95">
-                    <span wire:loading.remove>MASUK KE SISTEM</span>
-                    <span wire:loading>MENGONTROL AKSES...</span>
+                    class="w-full bg-slate-900 hover:bg-indigo-700 text-white font-semibold py-4 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group">
+                    <span wire:loading.remove>Sign in to Workspace</span>
+                    <span wire:loading class="flex items-center gap-2">
+                        <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Authenticating...
+                    </span>
+                    <svg wire:loading.remove xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
                 </button>
             </form>
         </div>
-        <div class="p-4 bg-slate-50 text-center border-t border-slate-100">
-            <span class="text-[10px] text-slate-400 uppercase font-bold tracking-widest">© 2025 PSTORE GROUP INDONESIA</span>
-        </div>
-    </div>
-</div>
-<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 font-sans p-4">
-    <div class="max-w-md w-full">
-        <!-- Decorative elements -->
-        <div class="absolute inset-0 overflow-hidden pointer-events-none">
-            <div class="absolute top-20 left-10 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
-            <div class="absolute -bottom-8 right-10 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
-        </div>
 
-        <!-- Card -->
-        <div class="relative bg-white/10 backdrop-blur-2xl rounded-3xl shadow-2xl overflow-hidden border border-white/20">
-            <!-- Header -->
-            <div class="bg-gradient-to-r from-purple-600 to-blue-600 p-8 text-center text-white relative overflow-hidden">
-                <div class="absolute inset-0 opacity-10">
-                    <div class="absolute inset-0" style="background: radial-gradient(circle, white 1px, transparent 1px); background-size: 20px 20px;"></div>
-                </div>
-                <div class="relative">
-                    <h1 class="text-4xl font-black tracking-tight">NEXUS</h1>
-                    <p class="text-purple-100 text-sm mt-1 font-light">Secure Access Portal</p>
-                </div>
-            </div>
-
-            <!-- Form Content -->
-            <div class="p-8">
-                @if (session()->has('error'))
-                    <div class="mb-6 p-4 bg-red-500/20 border border-red-500/50 rounded-2xl text-red-200 text-sm font-semibold backdrop-blur">
-                        {{ session('error') }}
-                    </div>
-                @endif
-
-                <form wire:submit.prevent="login" class="space-y-5">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-300 uppercase tracking-widest mb-3">Username</label>
-                        <input type="text" wire:model.defer="id_login" 
-                            class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-400 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition backdrop-blur-sm" 
-                            placeholder="Enter your username">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-bold text-slate-300 uppercase tracking-widest mb-3">Password</label>
-                        <input type="password" wire:model.defer="password" 
-                            class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-400 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition backdrop-blur-sm" 
-                            placeholder="••••••••">
-                    </div>
-
-                    <button type="submit" wire:loading.attr="disabled"
-                        class="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold py-3 rounded-xl shadow-lg shadow-purple-500/50 transition-all transform hover:scale-105 active:scale-95 mt-8 disabled:opacity-50 disabled:cursor-not-allowed">
-                        <span wire:loading.remove>SIGN IN</span>
-                        <span wire:loading class="inline-flex items-center">
-                            <svg class="animate-spin h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                            AUTHENTICATING...
-                        </span>
-                    </button>
-                </form>
-            </div>
-
-            <!-- Footer -->
-            <div class="px-8 py-4 bg-white/5 border-t border-white/10 text-center">
-                <p class="text-[11px] text-slate-400 uppercase font-bold tracking-widest">© 2025 Nexus Security Systems</p>
-            </div>
-        </div>
+        <p class="mt-8 text-center text-slate-400 text-xs font-medium tracking-wide uppercase">
+            &copy; 2026 Nexus Systems &bull; Global Operations
+        </p>
     </div>
 </div>
