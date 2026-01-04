@@ -1,6 +1,6 @@
 @php
     $isDark = ($item['theme'] ?? 'light') == 'dark';
-    // Mengatur background agar menyatu tanpa bezel hitam tambahan
+    // Hilangkan warna hitam, langsung gunakan warna kartu agar borderless
     $bgMain = $isDark ? '#1c1c1e' : '#ffffff';
     $bgCard = $isDark ? '#1c1c1e' : '#ffffff';
     $bgBack = $isDark ? '#141414' : '#d6d6d6';
@@ -22,14 +22,14 @@
     }
 @endphp
 
-<div id="{{ $id }}" class="iphone-screen" style="width: 375px; height: 812px; color: {{ $textColor }}; font-family: -apple-system, BlinkMacSystemFont, sans-serif; position: relative; overflow: hidden; flex-shrink: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; background-color: {{ $bgCard }}; border-radius: 50px;">
+<div id="{{ $id }}" class="iphone-screen" style="width: 375px; height: 812px; color: {{ $textColor }}; font-family: -apple-system, BlinkMacSystemFont, sans-serif; position: relative; overflow: hidden; flex-shrink: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; background-color: {{ $bgMain }}; border-radius: 50px;">
     
     <div style="width: 100%; height: 100%; position: relative; overflow: hidden;">
         
-        <div style="display: flex; justify-content: space-between; padding: 14px 26px 0 26px; align-items: center; height: 44px; position: absolute; top: 0; left: 0; width: 100%; z-index: 50; box-sizing: border-box;">
+        <div style="display: flex; justify-content: space-between; padding: 18px 24px 0 24px; align-items: center; height: 44px; position: absolute; top: 0; left: 0; width: 100%; z-index: 50; box-sizing: border-box;">
             <div style="font-weight: 600; font-size: 15px; width: 54px; text-align: left; color: {{ $headerColor }};">
                 <svg width="60" height="20">
-                    <text x="15" y="15" font-family="sans-serif" font-size="15" font-weight="600" fill="{{ $headerColor }}">{{ $item['hour'] }}:{{ $item['minute'] }}</text>
+                    <text x="10" y="15" font-family="sans-serif" font-size="15" font-weight="600" fill="{{ $headerColor }}">{{ $item['hour'] }}:{{ $item['minute'] }}</text>
                 </svg>
             </div>
 
@@ -57,33 +57,29 @@
             </div>
         </div>
 
-        <div style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; height: 92%; background-color: {{ $bgBack }}; border-top-left-radius: 45px; border-top-right-radius: 45px; z-index: 8;"></div>
+        <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 92%; background-color: {{ $bgBack }}; border-top-left-radius: 40px; border-top-right-radius: 40px; z-index: 8;"></div>
 
-        <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 90%; background-color: {{ $bgCard }}; border-top-left-radius: 45px; border-top-right-radius: 45px; z-index: 10; display: flex; flex-direction: column; overflow: hidden;">
+        <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 90%; background-color: {{ $bgCard }}; border-top-left-radius: 40px; border-top-right-radius: 40px; z-index: 10; display: flex; flex-direction: column; overflow: hidden;">
             
-            <div style="height: 50px; padding: 0 24px; display: flex; align-items: center; flex-shrink: 0; justify-content: flex-start;">
-                 <span style="color: #0A84FF; font-size: 18px; font-weight: 400;">Cancel</span>
-            </div>
-
-            <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; overflow: hidden; padding-top: 0px; margin-top: -10px;">
+            <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; overflow: hidden; padding-top: 30px;">
                 
-                <div style="width: 100%; height: 50px; flex-shrink: 0; margin-bottom: 15px;">
+                <div style="width: 100%; height: 50px; flex-shrink: 0; margin-bottom: 25px;">
                     <svg width="100%" height="50">
-                        <text x="50%" y="25" font-family="sans-serif" font-size="34" font-weight="700" fill="{{ $textColor }}" text-anchor="middle">Device Info</text>
+                        <text x="50%" y="30" font-family="sans-serif" font-size="34" font-weight="700" fill="{{ $textColor }}" text-anchor="middle">Device Info</text>
                     </svg>
                 </div>
 
                 @php
                     $fields = [
                         ['label' => 'EID', 'key' => 'eid', 'val' => $finalEid, 'width' => '92%', 'barHeight' => 20],
-                        ['label' => 'IMEI', 'key' => 'imei1', 'val' => $item['imei1'], 'width' => '70%', 'barHeight' => 20],
-                        ['label' => 'IMEI2', 'key' => 'imei2', 'val' => $item['imei2'], 'width' => '70%', 'barHeight' => 20],
-                        ['label' => 'MEID', 'key' => 'meid', 'val' => $item['meid'], 'width' => '60%', 'barHeight' => 20],
+                        ['label' => 'IMEI', 'key' => 'imei1', 'val' => $item['imei1'], 'width' => '72%', 'barHeight' => 20],
+                        ['label' => 'IMEI2', 'key' => 'imei2', 'val' => $item['imei2'], 'width' => '72%', 'barHeight' => 20],
+                        ['label' => 'MEID', 'key' => 'meid', 'val' => $item['meid'], 'width' => '62%', 'barHeight' => 20],
                     ];
                 @endphp
 
                 @foreach($fields as $field)
-                <div style="margin-bottom: 25px; width: 100%; display: flex; flex-direction: column; align-items: center; flex-shrink: 0;">
+                <div style="margin-bottom: 30px; width: 100%; display: flex; flex-direction: column; align-items: center; flex-shrink: 0;">
                     
                     <div style="width: 100%; height: 20px; margin-bottom: 8px;">
                         <svg width="100%" height="20">
@@ -106,6 +102,10 @@
                     </div>
                 </div>
                 @endforeach
+
+                <div style="margin-top: auto; margin-bottom: 35px; width: 100%; display: flex; justify-content: center;">
+                    <span style="color: #0A84FF; font-size: 19px; font-weight: 400;">Cancel</span>
+                </div>
             </div>
         </div>
         
