@@ -2,7 +2,7 @@
     $isDark = ($item['theme'] ?? 'light') == 'dark';
     $bgMain = $isDark ? '#000000' : '#f6f8f5';
     $bgCard = $isDark ? '#1c1c1e' : '#ffffff';
-    $bgBack = $isDark ? '#141414' : '#d6d6d6';
+    $bgBack = $isDark ? '#ffffff' : '#d6d6d6';
     $textColor = $isDark ? '#ffffff' : '#000000';
     $headerColor = $isDark ? '#ffffff' : '#000000'; 
     $labelColor = $isDark ? '#ffffff' : '#000000';
