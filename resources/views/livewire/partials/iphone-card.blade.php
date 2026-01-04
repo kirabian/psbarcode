@@ -8,7 +8,10 @@
     $headerColor = $isDark ? '#ffffff' : '#000000'; 
     $labelColor = $isDark ? '#ffffff' : '#000000';
 
-    // Pengaturan Frame Fisik Tipis: Light = Putih Bersih (#ffffff)
+    // Warna Kotak Kecil di atas (Abu-abu iOS)
+    $notchBoxColor = $isDark ? '#3a3a3c' : '#d1d1d6';
+
+    // Pengaturan Frame Fisik: Light = Putih (#ffffff), Dark = Hitam (#000000)
     $frameColor = $isDark ? '#000000' : '#ffffff';
     $outerBorder = $isDark ? '#333333' : '#eeeeee';
 
@@ -65,7 +68,7 @@
 
                     <svg width="17" height="12" viewBox="0 0 17 12" fill="{{ $headerColor }}">
                         <path d="M8.5 12L6.5 9.5H10.5L8.5 12Z"/>
-                        <path opacity="{{ ($item['wifiLevel'] ?? 3) >= 2 ? '1' : '0.3' }}" d="M8.5 4.5C6.6 4.5 4.9 5.2 3.6 6.4L5 7.8C5.9 7 7.1 6.5 8.5 6.5C9.9 6.5 11.1 7 12 7.8L13.4 6.4C12.1 5.2 10.4 4.5 8.5 4.5Z"/>
+                        <path opacity="{{ ($item['wifiLevel'] ?? 3) >= 2 ? '1' : '0.3' }}" d="M8.5 4.5C6.6 4.5 4.9 5.2 3.6 6.4L5 7.8C5.9 7 7.1 6.5 8.5 6.5C9.9 6.5 11.1 7 12 7.8L13.4 6.4C12.1(5.2 10.4 4.5 8.5 4.5Z"/>
                         <path opacity="{{ ($item['wifiLevel'] ?? 3) >= 3 ? '1' : '0.3' }}" d="M8.5 0.5C5.3 0.5 2.3 1.8 0.3 4L1.7 5.4C3.4 3.7 5.8 2.5 8.5 2.5C11.2 2.5 13.6 3.7 15.3 5.4L16.7 4C14.7 1.8 11.7 0.5 8.5 0.5Z"/>
                     </svg>
 
@@ -80,7 +83,9 @@
                 </div>
             </div>
 
-            <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 90%; background-color: {{ $bgCard }}; z-index: 10; display: flex; flex-direction: column; overflow: hidden;">
+            <div style="position: absolute; top: 78px; left: 50%; transform: translateX(-50%); width: 330px; height: 12px; background-color: {{ $notchBoxColor }}; border-top-left-radius: 12px; border-top-right-radius: 12px; z-index: 9;"></div>
+
+            <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 90%; background-color: {{ $bgCard }}; z-index: 10; display: flex; flex-direction: column; overflow: hidden; border-top-left-radius: 0; border-top-right-radius: 0;">
                 
                 <div style="height: 50px; padding: 0 24px; display: flex; align-items: center; flex-shrink: 0; justify-content: flex-start;">
                      <span style="color: #0A84FF; font-size: 18px; font-weight: 400;">Cancel</span>
