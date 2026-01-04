@@ -1,6 +1,6 @@
 @php
     $isDark = ($item['theme'] ?? 'light') == 'dark';
-    // Gunakan warna kartu sebagai background utama agar pinggiran hitam hilang total
+    // Gunakan warna seragam pada Main dan Card untuk menghilangkan bezel secara total
     $bgMain = $isDark ? '#1c1c1e' : '#ffffff';
     $bgCard = $isDark ? '#1c1c1e' : '#ffffff';
     $bgBack = $isDark ? '#141414' : '#d6d6d6';
@@ -22,9 +22,9 @@
     }
 @endphp
 
-<div id="{{ $id }}" class="iphone-screen" style="width: 375px; height: 812px; color: {{ $textColor }}; font-family: -apple-system, BlinkMacSystemFont, sans-serif; position: relative; overflow: hidden; flex-shrink: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; background-color: {{ $bgMain }}; border-radius: 40px;">
+<div id="{{ $id }}" class="iphone-screen" style="width: 375px; height: 812px; color: {{ $textColor }}; font-family: -apple-system, BlinkMacSystemFont, sans-serif; position: relative; overflow: hidden; flex-shrink: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; background-color: {{ $bgMain }}; border-radius: 40px; margin: 0; padding: 0;">
     
-    <div style="width: 100%; height: 100%; position: relative; overflow: hidden;">
+    <div style="width: 100%; height: 100%; position: absolute; top: 0; left: 0; right: 0; bottom: 0; overflow: hidden;">
         
         <div style="display: flex; justify-content: space-between; padding: 18px 24px 0 24px; align-items: center; height: 44px; position: absolute; top: 0; left: 0; width: 100%; z-index: 50; box-sizing: border-box;">
             <div style="font-weight: 600; font-size: 15px; width: 54px; text-align: left; color: {{ $headerColor }};">
@@ -57,9 +57,9 @@
             </div>
         </div>
 
-        <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 92%; background-color: {{ $bgBack }}; border-top-left-radius: 40px; border-top-right-radius: 40px; z-index: 8;"></div>
+        <div style="position: absolute; bottom: 0; left: 0; right: 0; width: 100%; height: 92%; background-color: {{ $bgBack }}; border-top-left-radius: 40px; border-top-right-radius: 40px; z-index: 8;"></div>
 
-        <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 90%; background-color: {{ $bgCard }}; border-top-left-radius: 40px; border-top-right-radius: 40px; z-index: 10; display: flex; flex-direction: column; overflow: hidden;">
+        <div style="position: absolute; bottom: 0; left: 0; right: 0; width: 100%; height: 90%; background-color: {{ $bgCard }}; border-top-left-radius: 40px; border-top-right-radius: 40px; z-index: 10; display: flex; flex-direction: column; overflow: hidden;">
             
             <div style="height: 50px; padding: 0 24px; display: flex; align-items: center; flex-shrink: 0; justify-content: flex-start;">
                  <span style="color: #0A84FF; font-size: 18px; font-weight: 400;">Cancel</span>
