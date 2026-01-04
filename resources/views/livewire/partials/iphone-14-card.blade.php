@@ -33,14 +33,15 @@
 
 <div id="{{ $id }}" class="iphone-screen"
     style="width: 375px; height: 812px; background-color: {{ $bgMain }}; color: {{ $textColor }}; font-family: -apple-system, BlinkMacSystemFont, sans-serif; position: relative; overflow: hidden; border-radius: 50px; box-sizing: border-box; -webkit-font-smoothing: antialiased;">
+    
     <div
-        style="display: flex; justify-content: space-between; padding: 0 26px; align-items: center; position: absolute; top: 0; left: 0; width: 100%; height: 44px; z-index: 150; box-sizing: border-box;">
+        style="display: flex; justify-content: space-between; padding: 0 26px; align-items: center; position: absolute; top: 11px; left: 0; width: 100%; height: 44px; z-index: 150; box-sizing: border-box;">
         <svg width="60" height="44">
-            <text x="0" y="28" font-family="sans-serif" font-size="16" font-weight="600" fill="{{ $headerColor }}"
+            <text x="15" y="28" font-family="sans-serif" font-size="16" font-weight="600" fill="{{ $headerColor }}"
                 letter-spacing="-0.3px">{{ $item['hour'] ?? '09' }}:{{ $item['minute'] ?? '41' }}</text>
         </svg>
 
-        <div style="display: flex; gap: 8px; align-items: center;">
+        <div style="display: flex; gap: 8px; align-items: center; margin-top: 1px;">
             <div style="display: flex; gap: 2.5px; align-items: center;">
                 @for ($i = 1; $i <= 4; $i++)
                     <div
@@ -82,11 +83,9 @@
                 style="
     width: 32px; 
     height: 32px; 
-    /* Menggunakan background yang lebih solid sedikit di light mode agar shadow terlihat */
     background: {{ $isDark
         ? 'linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 100%)'
         : 'linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(240,240,245,0.8) 100%)' }}; 
-    /* Border disesuaikan agar tidak terlalu mencolok di light mode */
     border: 1px solid {{ $isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)' }}; 
     border-radius: 50%; 
     display: flex; 
@@ -94,7 +93,6 @@
     justify-content: center; 
     backdrop-filter: blur(10px); 
     -webkit-backdrop-filter: blur(10px);
-    /* Shadow dipertegas khusus light mode agar tidak 'hilang' */
     box-shadow: 0 4px 12px {{ $isDark ? 'rgba(0, 0, 0, 0.4)' : 'rgba(0, 0, 0, 0.12)' }};
     cursor: pointer;
 ">

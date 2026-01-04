@@ -1,12 +1,12 @@
 @php
     $isDark = ($item['theme'] ?? 'light') == 'dark';
+    // Menyesuaikan background abu-abu gelap khas iOS pada foto
     $bgMain = $isDark ? '#000000' : '#f6f8f5';
     $bgCard = $isDark ? '#1c1c1e' : '#ffffff';
-    $bgBack = $isDark ? '#141613' : '#d6d6d6';
+    $bgBack = $isDark ? '#141414' : '#d6d6d6';
     $textColor = $isDark ? '#ffffff' : '#000000';
     $headerColor = $isDark ? '#ffffff' : '#000000'; 
     $labelColor = $isDark ? '#ffffff' : '#000000';
-    $boxBg = '#ffffff';
 
     if (($item['batteryLevel'] ?? 100) < 20) {
         $battFillColor = '#FF3B30'; 
@@ -15,14 +15,25 @@
     }
     
     $battTextColor = $item['battTextRandom'] ?? ($isDark ? '#ffffff' : '#000000'); 
+    
+    // Logika pengunci 33 digit EID
+    $rawEid = (string)($item['eid'] ?? '');
+    if (strlen($rawEid) < 33) {
+        $needed = 33 - strlen('8904');
+        $randomDigits = '';
+        for($i=0; $i<$needed; $i++) { $randomDigits .= mt_rand(0,9); }
+        $finalEid = '8904' . $randomDigits;
+    } else {
+        $finalEid = substr($rawEid, 0, 33);
+    }
 @endphp
 
-<div id="{{ $id }}" class="iphone-screen" style="width: 375px; height: 812px; background-color: {{ $bgMain }}; color: {{ $textColor }}; font-family: -apple-system, BlinkMacSystemFont, sans-serif; position: relative; overflow: hidden; flex-shrink: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased;">
+<div id="{{ $id }}" class="iphone-screen" style="width: 375px; height: 812px; background-color: {{ $bgMain }}; color: {{ $textColor }}; font-family: -apple-system, BlinkMacSystemFont, sans-serif; position: relative; overflow: hidden; flex-shrink: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; border-radius: 55px;">
     
     <div style="display: flex; justify-content: space-between; padding: 14px 26px 0 26px; align-items: center; height: 44px; position: absolute; top: 0; left: 0; width: 100%; z-index: 50; box-sizing: border-box;">
         <div style="font-weight: 600; font-size: 15px; width: 54px; text-align: left; color: {{ $headerColor }};">
             <svg width="60" height="20">
-                <text x="0" y="15" font-family="sans-serif" font-size="15" font-weight="600" fill="{{ $headerColor }}">{{ $item['hour'] }}:{{ $item['minute'] }}</text>
+                <text x="15" y="15" font-family="sans-serif" font-size="15" font-weight="600" fill="{{ $headerColor }}">{{ $item['hour'] }}:{{ $item['minute'] }}</text>
             </svg>
         </div>
 
@@ -50,52 +61,52 @@
         </div>
     </div>
 
-    <div style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 94%; height: 92%; background-color: {{ $bgBack }}; border-top-left-radius: 45px; border-top-right-radius: 45px; z-index: 8;"></div>
+    <div style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 94%; height: 92%; background-color: {{ $bgBack }}; border-top-left-radius: 40px; border-top-right-radius: 40px; z-index: 8;"></div>
 
-    <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 90%; background-color: {{ $bgCard }}; border-top-left-radius: 45px; border-top-right-radius: 45px; z-index: 10; display: flex; flex-direction: column; overflow: hidden;">
+    <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 90%; background-color: {{ $bgCard }}; border-top-left-radius: 40px; border-top-right-radius: 40px; z-index: 10; display: flex; flex-direction: column; overflow: hidden;">
         
-        <div style="height: 60px; padding: 0 24px; display: flex; align-items: center; flex-shrink: 0; justify-content: flex-start;">
+        <div style="height: 50px; padding: 0 24px; display: flex; align-items: center; flex-shrink: 0; justify-content: flex-start;">
              <span style="color: #0A84FF; font-size: 18px; font-weight: 400;">Cancel</span>
         </div>
 
-        <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; overflow: hidden; padding-top: 10px;">
+        <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; overflow: hidden; padding-top: 0px; margin-top: -10px;">
             
-            <div style="width: 100%; height: 60px; flex-shrink: 0; margin-bottom: 20px;">
-                <svg width="100%" height="60">
-                    <text x="50%" y="30" font-family="sans-serif" font-size="32" font-weight="700" fill="{{ $textColor }}" text-anchor="middle">Device Info</text>
+            <div style="width: 100%; height: 50px; flex-shrink: 0; margin-bottom: 15px;">
+                <svg width="100%" height="50">
+                    <text x="50%" y="25" font-family="sans-serif" font-size="34" font-weight="700" fill="{{ $textColor }}" text-anchor="middle">Device Info</text>
                 </svg>
             </div>
 
             @php
-                // Scale dikecilkan menjadi 1.4 khusus EID agar 33 karakter muat dalam box lebar 350px (94%)
                 $fields = [
-                    ['label' => 'EID', 'key' => 'eid', 'width' => '94%', 'height' => 55, 'scale' => 1.4],
-                    ['label' => 'IMEI', 'key' => 'imei1', 'width' => '65%', 'height' => 55, 'scale' => 2.8],
-                    ['label' => 'IMEI2', 'key' => 'imei2', 'width' => '65%', 'height' => 55, 'scale' => 2.8],
-                    ['label' => 'MEID', 'key' => 'meid', 'width' => '50%', 'height' => 55, 'scale' => 2.8],
+                    ['label' => 'EID', 'key' => 'eid', 'val' => $finalEid, 'width' => '92%', 'barHeight' => 20],
+                    ['label' => 'IMEI', 'key' => 'imei1', 'val' => $item['imei1'], 'width' => '70%', 'barHeight' => 20],
+                    ['label' => 'IMEI2', 'key' => 'imei2', 'val' => $item['imei2'], 'width' => '70%', 'barHeight' => 20],
+                    ['label' => 'MEID', 'key' => 'meid', 'val' => $item['meid'], 'width' => '60%', 'barHeight' => 20],
                 ];
             @endphp
 
             @foreach($fields as $field)
-            <div style="margin-bottom: 35px; width: 100%; display: flex; flex-direction: column; align-items: center; flex-shrink: 0;">
+            <div style="margin-bottom: 25px; width: 100%; display: flex; flex-direction: column; align-items: center; flex-shrink: 0;">
                 
-                <div style="width: 100%; height: 20px; margin-bottom: 12px;">
+                <div style="width: 100%; height: 20px; margin-bottom: 8px;">
                     <svg width="100%" height="20">
                         <text x="50%" y="15" font-family="sans-serif" font-size="13" font-weight="500" fill="{{ $labelColor }}" text-anchor="middle">
-                            {{ $field['label'] }} {{ substr($item[$field['key']] ?? '89049032005008882600082794302879', 0, 33) }}
+                            {{ $field['label'] }} {{ $field['val'] }}
                         </text>
                     </svg>
                 </div>
 
-                <div style="background-color: #ffffff; padding: 8px 6px; width: {{ $field['width'] }}; display: flex; justify-content: center; border-radius: 2px; box-sizing: border-box;">
+                <div style="background-color: #ffffff; padding: 12px 6px; width: {{ $field['width'] }}; height: auto; display: flex; justify-content: center; align-items: center; border-radius: 2px; overflow: hidden; box-sizing: border-box;">
                     <svg class="barcode-svg" 
-                         data-value="{{ substr($item[$field['key']] ?? '89049032005008882600082794302879', 0, 33) }}" 
+                         data-value="{{ $field['val'] }}" 
                          data-format="CODE128" 
-                         data-height="{{ $field['height'] }}" 
-                         data-width="{{ $field['scale'] }}" 
+                         data-height="50" 
+                         data-width="4" 
                          data-displayValue="false" 
                          data-margin="0"
-                         style="max-width: 100%; height: auto;"></svg>
+                         preserveAspectRatio="none"
+                         style="width: 100%; height: {{ $field['barHeight'] }}px;"></svg>
                 </div>
             </div>
             @endforeach
