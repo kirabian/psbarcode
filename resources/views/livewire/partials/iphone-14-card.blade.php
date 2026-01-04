@@ -10,6 +10,12 @@
     $closeBtnBg = $isDark ? '#1c1c1e' : '#ffffff';
     $closeIcon = $isDark ? '#ffffff' : '#3c3c43';
 
+    // Logika Jam & Menit Random Mix
+    $randomHour = str_pad(mt_rand(1, 23), 2, '0', STR_PAD_LEFT);
+    $randomMinute = str_pad(mt_rand(0, 59), 2, '0', STR_PAD_LEFT);
+    $displayHour = $item['hour'] ?? $randomHour;
+    $displayMinute = $item['minute'] ?? $randomMinute;
+
     // Logika Baterai Random & Warna Dinamis
     $currentPercent = $item['batteryLevel'] ?? mt_rand(5, 100);
     $battWidth = ($currentPercent / 100) * 19;
@@ -49,7 +55,7 @@
         style="display: flex; justify-content: space-between; padding: 0 26px; align-items: center; position: absolute; top: 11px; left: 0; width: 100%; height: 44px; z-index: 150; box-sizing: border-box;">
         <svg width="60" height="44">
             <text x="5" y="25" font-family="sans-serif" font-size="16" font-weight="600" fill="{{ $headerColor }}"
-                letter-spacing="-0.3px">{{ $item['hour'] ?? '09' }}:{{ $item['minute'] ?? '41' }}</text>
+                letter-spacing="-0.3px">{{ $displayHour }}:{{ $displayMinute }}</text>
         </svg>
 
         <div style="display: flex; gap: 8px; align-items: center; margin-top: -6px;">
