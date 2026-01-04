@@ -169,10 +169,10 @@
         <div class="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-md p-2 md:p-4 overflow-y-auto">
             <div class="relative w-full max-w-sm my-auto">
                 <div class="flex justify-between mb-4 px-2">
-                    <button onclick="downloadCard()" class="px-5 py-3 bg-emerald-500 text-white rounded-2xl font-bold text-xs shadow-lg hover:bg-emerald-600 transition-all active:scale-95">Download JPG</button>
+                    <button onclick="downloadCardPng()" class="px-5 py-3 bg-emerald-500 text-white rounded-2xl font-bold text-xs shadow-lg hover:bg-emerald-600 transition-all active:scale-95">Download PNG</button>
                     <button wire:click="closeModal" class="px-5 py-3 bg-white/10 text-white rounded-2xl font-bold text-xs hover:bg-white/20 transition-all">Close</button>
                 </div>
-                <div id="capture-area" class="rounded-[50px] overflow-hidden shadow-2xl flex justify-center bg-black scale-90 sm:scale-100">
+                <div id="capture-area" class="rounded-[50px] overflow-hidden shadow-2xl flex justify-center bg-transparent scale-90 sm:scale-100">
                     @if($selectedItem['deviceModel'] == 'iphone14')
                         @include('livewire.partials.iphone-14-card', ['item' => $selectedItem, 'id' => 'ios-card-14'])
                     @else
@@ -194,7 +194,7 @@
             const zip = new JSZip();
             const btn = event.target;
             const originalText = btn.innerHTML;
-            btn.innerHTML = '<span class="mdi mdi-loading mdi-spin"></span> Bundling...';
+            btn.innerHTML = '<span class="mdi mdi-loading mdi-spin"></span> Bundling PNG...';
             btn.disabled = true;
 
             @this.getImeiDataForZip().then(async (data) => {
@@ -202,34 +202,32 @@
                 for (const item of data) {
                     tempArea.innerHTML = item.html;
                     
-                    // Inisialisasi barcode secara spesifik agar tidak terlewat
                     const barcodeElements = tempArea.querySelectorAll(".barcode-svg");
                     barcodeElements.forEach(el => {
                         const val = el.getAttribute('data-value');
                         if (val && val !== '') JsBarcode(el).init();
                     });
                     
-                    // Tunggu render sebentar
-                    await new Promise(r => setTimeout(r, 100));
+                    await new Promise(r => setTimeout(r, 150));
                     
-                    const canvas = await html2canvas(tempArea.firstChild, { scale: 2, useCORS: true, backgroundColor: '#000' });
-                    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.8));
-                    zip.file(`IMEI_${item.imei1}.jpg`, blob);
+                    const canvas = await html2canvas(tempArea.firstChild, { scale: 2, useCORS: true, backgroundColor: null });
+                    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+                    zip.file(`IMEI_${item.imei1}.png`, blob);
                     tempArea.innerHTML = '';
                 }
                 const content = await zip.generateAsync({type: "blob"});
-                saveAs(content, `Barcodes_${Date.now()}.zip`);
+                saveAs(content, `PSTORE_Barcodes_${Date.now()}.zip`);
                 btn.innerHTML = originalText;
                 btn.disabled = false;
             });
         }
 
-        function downloadCard() {
-            const area = document.getElementById('capture-area');
-            html2canvas(area, { scale: 3, useCORS: true, backgroundColor: '#000' }).then(canvas => {
+        function downloadCardPng() {
+            const area = document.getElementById('capture-area').firstElementChild;
+            html2canvas(area, { scale: 3, useCORS: true, backgroundColor: null, logging: false, allowTaint: true }).then(canvas => {
                 const link = document.createElement('a');
-                link.download = `IMEI-${Date.now()}.jpg`;
-                link.href = canvas.toDataURL('image/jpeg', 0.9);
+                link.download = `DeviceInfo-${Date.now()}.png`;
+                link.href = canvas.toDataURL('image/png');
                 link.click();
             });
         }
