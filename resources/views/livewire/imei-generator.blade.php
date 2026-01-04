@@ -66,7 +66,7 @@
                             <span wire:loading.remove wire:target="checkAllIcloud" class="mdi mdi-refresh"></span> Check All
                         </button>
                         @if($viewMode == 'card')
-                        <button onclick="downloadAllAsZip()" class="flex-1 sm:flex-none px-4 py-2.5 bg-emerald-600 text-white rounded-xl font-semibold text-xs hover:bg-emerald-700 flex items-center justify-center gap-2 transition-all shadow-sm">
+                        <button id="downloadBtn" onclick="downloadAllAsZip()" class="flex-1 sm:flex-none px-4 py-2.5 bg-emerald-600 text-white rounded-xl font-semibold text-xs hover:bg-emerald-700 flex items-center justify-center gap-2 transition-all shadow-sm">
                             <span class="mdi mdi-zip-box"></span> Download ZIP
                         </button>
                         <select wire:model="selectedCardType" class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl border border-zinc-200 font-semibold text-xs bg-white outline-none focus:ring-2 focus:ring-emerald-500">
@@ -78,16 +78,23 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4">
                     @php 
-                        $countReady = collect($readyGroups)->flatten(1)->count() * 2;
-                        $countPaired = count($pairedSingles) * 2;
-                        $countLeftover = $leftoverSingle ? 1 : 0;
-                        $totalImeis = $countReady + $countPaired + $countLeftover;
+                        $countDouble = collect($readyGroups)->flatten(1)->count() * 2;
+                        $countSingle = (count($pairedSingles) * 2) + ($leftoverSingle ? 1 : 0);
+                        $totalImeis = $countDouble + $countSingle;
                     @endphp
                     <div class="bg-white p-4 md:p-5 rounded-2xl shadow-sm border border-zinc-200">
                         <p class="text-[10px] text-zinc-500 font-bold uppercase mb-1">Total IMEIs</p>
                         <p class="text-2xl md:text-3xl font-black text-zinc-900">{{ $totalImeis }}</p>
+                    </div>
+                    <div class="bg-white p-4 md:p-5 rounded-2xl shadow-sm border border-zinc-200">
+                        <p class="text-[10px] text-blue-600 font-bold uppercase mb-1">Total Double</p>
+                        <p class="text-2xl md:text-3xl font-black text-blue-600">{{ $countDouble }}</p>
+                    </div>
+                    <div class="bg-white p-4 md:p-5 rounded-2xl shadow-sm border border-zinc-200">
+                        <p class="text-[10px] text-orange-600 font-bold uppercase mb-1">Total Single</p>
+                        <p class="text-2xl md:text-3xl font-black text-orange-600">{{ $countSingle }}</p>
                     </div>
                     <div class="bg-white p-4 md:p-5 rounded-2xl shadow-sm border border-zinc-200">
                         <p class="text-[10px] text-emerald-600 font-bold uppercase mb-1">iCloud ON</p>
@@ -96,10 +103,6 @@
                     <div class="bg-white p-4 md:p-5 rounded-2xl shadow-sm border border-zinc-200">
                         <p class="text-[10px] text-red-600 font-bold uppercase mb-1">iCloud OFF</p>
                         <p class="text-2xl md:text-3xl font-black text-red-600">{{ collect($icloudStatus)->where('status', 'OFF')->count() }}</p>
-                    </div>
-                    <div class="bg-white p-4 md:p-5 rounded-2xl shadow-sm border border-zinc-200">
-                        <p class="text-[10px] text-zinc-400 font-bold uppercase mb-1">Pending</p>
-                        <p class="text-2xl md:text-3xl font-black text-zinc-400">{{ $totalImeis - count($icloudStatus) }}</p>
                     </div>
                 </div>
 
@@ -192,14 +195,23 @@
 
         async function downloadAllAsZip() {
             const zip = new JSZip();
-            const btn = event.target;
+            const btn = document.getElementById('downloadBtn');
             const originalText = btn.innerHTML;
-            btn.innerHTML = '<span class="mdi mdi-loading mdi-spin"></span> Bundling PNG...';
+            
+            // Pencegahan klik berkali-kali
+            btn.innerHTML = '<span class="mdi mdi-loading mdi-spin"></span> Processing ZIP...';
             btn.disabled = true;
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
 
-            @this.getImeiDataForZip().then(async (data) => {
+            try {
+                const data = await @this.getImeiDataForZip();
                 const tempArea = document.getElementById('zip-temp-area');
-                for (const item of data) {
+                
+                for (let i = 0; i < data.length; i++) {
+                    const item = data[i];
+                    // Update teks progress
+                    btn.innerHTML = `<span class="mdi mdi-loading mdi-spin"></span> Generating ${i + 1}/${data.length}`;
+                    
                     tempArea.innerHTML = item.html;
                     
                     const barcodeElements = tempArea.querySelectorAll(".barcode-svg");
@@ -208,18 +220,31 @@
                         if (val && val !== '') JsBarcode(el).init();
                     });
                     
-                    await new Promise(r => setTimeout(r, 150));
+                    await new Promise(r => setTimeout(r, 200));
                     
-                    const canvas = await html2canvas(tempArea.firstChild, { scale: 2, useCORS: true, backgroundColor: null });
+                    const canvas = await html2canvas(tempArea.firstChild, { 
+                        scale: 2, 
+                        useCORS: true, 
+                        backgroundColor: null 
+                    });
+                    
                     const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
                     zip.file(`IMEI_${item.imei1}.png`, blob);
                     tempArea.innerHTML = '';
                 }
+                
+                btn.innerHTML = '<span class="mdi mdi-loading mdi-spin"></span> Compressing...';
                 const content = await zip.generateAsync({type: "blob"});
-                saveAs(content, `PSTORE_Barcodes_${Date.now()}.zip`);
+                saveAs(content, `Barcodes_Alternated_${Date.now()}.zip`);
+                
+            } catch (error) {
+                console.error(error);
+                alert('Gagal mendownload ZIP');
+            } finally {
                 btn.innerHTML = originalText;
                 btn.disabled = false;
-            });
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
         }
 
         function downloadCardPng() {

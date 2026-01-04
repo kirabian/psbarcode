@@ -75,17 +75,17 @@ class ImeiGenerator extends Component
     public function openCard($imei1, $imei2 = null)
     {
         $this->lastTheme = ($this->lastTheme == 'light') ? 'dark' : 'light';
-        $this->selectedItem = $this->createItemData($imei1, $imei2);
+        $this->selectedItem = $this->createItemData($imei1, $imei2, $this->lastTheme);
         $this->showModal = true;
         $this->dispatchBrowserEvent('modalOpened');
     }
 
-    private function createItemData($imei1, $imei2 = null) {
+    private function createItemData($imei1, $imei2 = null, $theme = 'light') {
         return [
             'imei1' => $imei1, 'imei2' => $imei2 ?: $imei1, 'meid' => substr($imei1, 0, 14),
             'eid' => '8904' . mt_rand(10000000, 99999999) . mt_rand(10000000, 99999999),
             'hour' => now()->format('H'), 'minute' => now()->format('i'),
-            'batteryLevel' => rand(45, 95), 'theme' => $this->lastTheme,
+            'batteryLevel' => rand(45, 95), 'theme' => $theme,
             'deviceModel' => $this->selectedCardType
         ];
     }
@@ -93,19 +93,22 @@ class ImeiGenerator extends Component
     public function getImeiDataForZip() {
         $data = [];
         $view = ($this->selectedCardType == 'iphone14') ? 'livewire.partials.iphone-14-card' : 'livewire.partials.iphone-card';
+        $currentTheme = 'light';
         
         foreach($this->readyGroups as $tac => $pairs) {
             foreach($pairs as $p) {
-                $item = $this->createItemData($p['imei1'], $p['imei2']);
+                $item = $this->createItemData($p['imei1'], $p['imei2'], $currentTheme);
                 $data[] = ['imei1' => $p['imei1'], 'html' => view($view, ['item' => $item, 'id' => 'z-'.$p['imei1']])->render()];
+                $currentTheme = ($currentTheme == 'light') ? 'dark' : 'light';
             }
         }
         foreach($this->pairedSingles as $ps) {
-            $item = $this->createItemData($ps[0], $ps[1]);
+            $item = $this->createItemData($ps[0], $ps[1], $currentTheme);
             $data[] = ['imei1' => $ps[0], 'html' => view($view, ['item' => $item, 'id' => 'z-'.$ps[0]])->render()];
+            $currentTheme = ($currentTheme == 'light') ? 'dark' : 'light';
         }
         if($this->leftoverSingle) {
-            $item = $this->createItemData($this->leftoverSingle, null);
+            $item = $this->createItemData($this->leftoverSingle, null, $currentTheme);
             $data[] = ['imei1' => $this->leftoverSingle, 'html' => view($view, ['item' => $item, 'id' => 'z-'.$this->leftoverSingle])->render()];
         }
         return $data;
