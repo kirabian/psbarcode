@@ -1,10 +1,11 @@
 @php
     $isDark = ($item['theme'] ?? 'light') == 'dark';
     
-    // Warna background & Teks
-    $bgCard = $isDark ? '#1c1c1e' : '#ffffff';
+    // Warna tema internal
+    $bgMain = $isDark ? '#000000' : '#ffffff';
     $textColor = $isDark ? '#ffffff' : '#000000';
-    $labelColor = $isDark ? '#ffffff' : '#000000';
+    $headerColor = $isDark ? '#ffffff' : '#000000'; 
+    $labelColor = $isDark ? '#8e8e93' : '#000000';
 
     // Logika pengunci 33 digit EID
     $rawEid = (string)($item['eid'] ?? '');
@@ -18,64 +19,86 @@
     }
 
     $fields = [
-        ['label' => 'EID', 'val' => $finalEid, 'barHeight' => 55],
-        ['label' => 'IMEI', 'val' => $item['imei1'], 'barHeight' => 55],
-        ['label' => 'IMEI2', 'val' => $item['imei2'], 'barHeight' => 55],
-        ['label' => 'MEID', 'val' => $item['meid'], 'barHeight' => 55],
+        ['label' => 'EID', 'val' => $finalEid],
+        ['label' => 'IMEI', 'val' => $item['imei1']],
+        ['label' => 'IMEI2', 'val' => $item['imei2']],
+        ['label' => 'MEID', 'val' => $item['meid']],
     ];
 @endphp
 
 <div id="{{ $id }}" style="
     width: 375px; 
-    background-color: {{ $bgCard }}; 
+    height: 812px; 
+    background-color: {{ $bgMain }}; 
     color: {{ $textColor }}; 
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
-    padding: 20px 0; 
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif; 
+    position: relative; 
+    overflow: hidden; 
     display: flex; 
-    flex-direction: column; 
-    align-items: center; 
+    flex-direction: column;
     -webkit-font-smoothing: antialiased;
 ">
     
-    <div style="width: 100%; padding: 0 24px; margin-bottom: 20px;">
-        <span style="color: #0A84FF; font-size: 19px; font-weight: 400; cursor: pointer;">Cancel</span>
+    <div style="display: flex; justify-content: space-between; padding: 14px 26px 0 26px; align-items: center; height: 44px; width: 100%; box-sizing: border-box; z-index: 50;">
+        <div style="font-weight: 600; font-size: 15px; width: 54px; text-align: left; color: {{ $headerColor }};">
+            {{ $item['hour'] ?? '13' }}:{{ $item['minute'] ?? '35' }}
+        </div>
+
+        <div style="display: flex; gap: 7px; align-items: center;">
+            <div style="display: flex; gap: 2.5px; align-items: flex-end; height: 10px;">
+                @for($i=1; $i<=4; $i++)
+                    <div style="width: 3px; height: {{ $i * 2.5 }}px; background-color: {{ $headerColor }}; border-radius: 0.5px; opacity: {{ ($item['signalStrength'] ?? 4) >= $i ? '1' : '0.2' }};"></div>
+                @endfor
+            </div>
+
+            <svg width="17" height="12" viewBox="0 0 17 12" fill="{{ $headerColor }}">
+                <path d="M8.5 12L6.5 9.5H10.5L8.5 12Z"/>
+                <path opacity="0.3" d="M8.5 4.5C6.6 4.5 4.9 5.2 3.6 6.4L5 7.8C5.9 7 7.1 6.5 8.5 6.5C9.9 6.5 11.1 7 12 7.8L13.4 6.4C12.1 5.2 10.4 4.5 8.5 4.5Z"/>
+                <path d="M8.5 0.5C5.3 0.5 2.3 1.8 0.3 4L1.7 5.4C3.4 3.7 5.8 2.5 8.5 2.5C11.2 2.5 13.6 3.7 15.3 5.4L16.7 4C14.7 1.8 11.7 0.5 8.5 0.5Z"/>
+            </svg>
+
+            <div style="position: relative; width: 25px; height: 12px;">
+                <svg width="25" height="12" viewBox="0 0 25 12">
+                    <rect x="0.5" y="0.5" width="21" height="11" rx="2.5" stroke="{{ $headerColor }}" stroke-width="1" fill="none" opacity="0.35"/>
+                    <path d="M22.5 4C23.3 4 24 4.67 24 5.5V6.5C24 7.33 23.3 8 22.5 8V4Z" fill="{{ $headerColor }}" opacity="0.35"/>
+                    <rect x="2" y="2" width="18" height="8" rx="1.5" fill="#34C759"/>
+                </svg>
+            </div>
+        </div>
     </div>
 
-    <div style="width: 100%; text-align: center; margin-bottom: 40px;">
-        <h1 style="font-size: 34px; font-weight: 700; margin: 0; color: {{ $textColor }};">Device Info</h1>
+    <div style="padding: 0 24px; margin-top: 10px;">
+        <span style="color: #0A84FF; font-size: 18px; font-weight: 400; cursor: pointer;">Cancel</span>
     </div>
 
-    @foreach($fields as $field)
-    <div style="margin-bottom: 35px; width: 100%; display: flex; flex-direction: column; align-items: center;">
+    <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; padding-top: 20px;">
         
-        <div style="width: 90%; text-align: center; margin-bottom: 10px;">
-            <span style="font-size: 14px; font-weight: 500; color: {{ $labelColor }}; word-break: break-all;">
-                {{ $field['label'] }} {{ $field['val'] }}
-            </span>
-        </div>
+        <h1 style="font-size: 34px; font-weight: 700; margin-bottom: 30px; color: {{ $textColor }};">Device Info</h1>
 
-        <div style="
-            background-color: #ffffff; 
-            padding: 15px 10px; 
-            width: 92%; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            border-radius: 4px;
-            box-sizing: border-box;
-        ">
-            <svg class="barcode-svg" 
-                 data-value="{{ $field['val'] }}" 
-                 data-format="CODE128" 
-                 data-height="100" 
-                 data-width="4" 
-                 data-displayValue="false" 
-                 data-margin="0"
-                 preserveAspectRatio="none"
-                 style="width: 100%; height: {{ $field['barHeight'] }}px;"></svg>
+        @foreach($fields as $field)
+        <div style="margin-bottom: 30px; width: 100%; display: flex; flex-direction: column; align-items: center;">
+            
+            <div style="width: 85%; text-align: center; margin-bottom: 8px;">
+                <span style="font-size: 13px; font-weight: 500; color: {{ $labelColor }}; word-break: break-all; line-height: 1.4;">
+                    {{ $field['label'] }} {{ $field['val'] }}
+                </span>
+            </div>
+
+            <div style="background-color: #ffffff; padding: 12px 8px; width: 90%; border-radius: 4px; display: flex; justify-content: center; align-items: center;">
+                <svg class="barcode-svg" 
+                     data-value="{{ $field['val'] }}" 
+                     data-format="CODE128" 
+                     data-height="50" 
+                     data-width="4" 
+                     data-displayValue="false" 
+                     data-margin="0"
+                     preserveAspectRatio="none"
+                     style="width: 100%; height: 55px;"></svg>
+            </div>
         </div>
+        @endforeach
+
     </div>
-    @endforeach
 
-    <div style="width: 134px; height: 5px; background-color: {{ $textColor }}; border-radius: 100px; margin-top: 20px; opacity: 0.8;"></div>
+    <div style="width: 134px; height: 5px; background-color: {{ $textColor }}; border-radius: 100px; margin: 0 auto 10px auto; opacity: 1;"></div>
 </div>
