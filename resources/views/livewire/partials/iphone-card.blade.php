@@ -13,7 +13,7 @@
 
     // Pengaturan Frame Fisik: Light = Putih (#ffffff), Dark = Hitam (#000000)
     $frameColor = $isDark ? '#000000' : '#ffffff';
-    $outerBorder = $isDark ? '#333333' : '#eeeeee';
+    $outerBorder = $isDark ? '#000000' : '#eeeeee';
 
     if (($item['batteryLevel'] ?? 100) < 20) {
         $battFillColor = '#FF3B30'; 
