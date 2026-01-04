@@ -1,6 +1,7 @@
 @php
     $isDark = ($item['theme'] ?? 'light') == 'dark';
-    // Menyesuaikan background abu-abu gelap khas iOS pada foto
+    
+    // Warna background internal layar
     $bgMain = $isDark ? '#000000' : '#f6f8f5';
     $bgCard = $isDark ? '#1c1c1e' : '#ffffff';
     $bgBack = $isDark ? '#141414' : '#d6d6d6';
@@ -8,9 +9,9 @@
     $headerColor = $isDark ? '#ffffff' : '#000000'; 
     $labelColor = $isDark ? '#ffffff' : '#000000';
 
-    // Penyesuaian warna frame fisik berdasarkan theme
-    $frameColor = $isDark ? '#080808' : '#d1d1d6';
-    $outerBorder = $isDark ? '#222222' : '#a1a1a6';
+    // Pengaturan Frame Tipis: Light = Putih (#fff), Dark = Hitam (#080808)
+    $frameColor = $isDark ? '#080808' : '#ffffff';
+    $outerBorder = $isDark ? '#222222' : '#eeeeee';
 
     if (($item['batteryLevel'] ?? 100) < 20) {
         $battFillColor = '#FF3B30'; 
@@ -33,31 +34,31 @@
 @endphp
 
 <div class="iphone-physical-frame" style="
-    width: 405px; 
-    height: 842px; 
+    width: 387px; 
+    height: 824px; 
     background-color: {{ $frameColor }}; 
-    border-radius: 62px; 
-    padding: 15px; 
+    border-radius: 54px; 
+    padding: 6px; 
     position: relative; 
     display: flex; 
     align-items: center; 
     justify-content: center; 
     box-sizing: border-box; 
-    border: 2px solid {{ $outerBorder }};
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    margin: 20px auto;
+    border: 1px solid {{ $outerBorder }};
+    margin: 10px auto;
+    overflow: hidden;
 ">
     <div style="
         position: absolute; 
-        top: 32px; 
-        width: 60px; 
-        height: 5px; 
-        background: rgba(0,0,0,0.3); 
+        top: 28px; 
+        width: 50px; 
+        height: 4px; 
+        background: rgba(0,0,0,0.1); 
         border-radius: 10px; 
         z-index: 60;
     "></div>
 
-    <div id="{{ $id }}" class="iphone-screen" style="width: 375px; height: 812px; background-color: {{ $bgMain }}; color: {{ $textColor }}; font-family: -apple-system, BlinkMacSystemFont, sans-serif; position: relative; overflow: hidden; flex-shrink: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; border-radius: 48px;">
+    <div id="{{ $id }}" class="iphone-screen" style="width: 375px; height: 812px; background-color: {{ $bgMain }}; color: {{ $textColor }}; font-family: -apple-system, BlinkMacSystemFont, sans-serif; position: relative; overflow: hidden; flex-shrink: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; border-radius: 46px;">
         
         <div style="display: flex; justify-content: space-between; padding: 14px 26px 0 26px; align-items: center; height: 44px; position: absolute; top: 0; left: 0; width: 100%; z-index: 50; box-sizing: border-box;">
             <div style="font-weight: 600; font-size: 15px; width: 54px; text-align: left; color: {{ $headerColor }};">
