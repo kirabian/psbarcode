@@ -21,7 +21,7 @@
     }
 @endphp
 
-<div id="{{ $id }}" class="iphone-screen" style="width: 375px; height: 812px; background-color: #000000; color: {{ $textColor }}; font-family: -apple-system, BlinkMacSystemFont, sans-serif; position: relative; overflow: hidden; flex-shrink: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; padding: 2px;">
+<div id="{{ $id }}" class="iphone-screen" style="width: 375px; height: 812px; color: {{ $textColor }}; font-family: -apple-system, BlinkMacSystemFont, sans-serif; position: relative; overflow: hidden; flex-shrink: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; padding: 2px;">
     
     <div style="width: 100%; height: 100%; background-color: {{ $bgMain }}; border-radius: 40px; position: relative; overflow: hidden;">
         
