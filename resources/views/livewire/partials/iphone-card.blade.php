@@ -1,14 +1,13 @@
 @php
-    $isDark = ($item['theme'] ?? 'light') == 'dark';
-    // Langsung gunakan warna kartu sebagai background utama tanpa bezel hitam sama sekali
-    $bgColor = $isDark ? '#1c1c1e' : '#ffffff';
-    $bgBack = $isDark ? '#141414' : '#d6d6d6';
-    $textColor = $isDark ? '#ffffff' : '#000000';
-    $headerColor = $isDark ? '#ffffff' : '#000000'; 
-    $labelColor = $isDark ? '#ffffff' : '#000000';
+    $isDark = false; // Force light mode
+    $bgColor = '#ffffff'; // Background putih
+    $bgBack = '#ffffff'; // Background putih untuk bagian atas
+    $textColor = '#000000'; // Teks hitam
+    $headerColor = '#000000'; 
+    $labelColor = '#000000';
 
     $battFillColor = ($item['batteryLevel'] ?? 100) < 20 ? '#FF3B30' : '#34C759';
-    $battTextColor = $item['battTextRandom'] ?? ($isDark ? '#ffffff' : '#000000'); 
+    $battTextColor = $item['battTextRandom'] ?? '#000000'; 
     
     $rawEid = (string)($item['eid'] ?? '');
     if (strlen($rawEid) < 33) {
@@ -21,7 +20,7 @@
     }
 @endphp
 
-<div id="{{ $id }}" class="iphone-screen-content" style="width: 375px; height: 812px; background-color: {{ $bgColor }}; color: {{ $textColor }}; font-family: -apple-system, BlinkMacSystemFont, sans-serif; position: relative; overflow: hidden; box-sizing: border-box; -webkit-font-smoothing: antialiased; border-radius: 40px; margin: 0; padding: 0;">
+<div id="{{ $id }}" class="iphone-screen-content" style="width: 375px; height: 812px; background-color: {{ $bgColor }}; color: {{ $textColor }}; font-family: -apple-system, BlinkMacSystemFont, sans-serif; position: relative; overflow: hidden; box-sizing: border-box; -webkit-font-smoothing: antialiased; margin: 0; padding: 0;">
     
     <div style="display: flex; justify-content: space-between; padding: 18px 24px 0 24px; align-items: center; height: 44px; width: 100%; z-index: 50; box-sizing: border-box;">
         <div style="font-weight: 600; font-size: 15px; width: 54px; text-align: left; color: {{ $headerColor }};">
@@ -54,9 +53,10 @@
         </div>
     </div>
 
-    <div style="position: absolute; top: 44px; left: 0; width: 100%; height: 80px; background-color: {{ $bgBack }}; border-top-left-radius: 40px; border-top-right-radius: 40px; z-index: 1;"></div>
+    <!-- Hapus bagian background abu-abu/hitam -->
+    <!-- <div style="position: absolute; top: 44px; left: 0; width: 100%; height: 80px; background-color: {{ $bgBack }}; border-top-left-radius: 40px; border-top-right-radius: 40px; z-index: 1;"></div> -->
 
-    <div style="position: absolute; top: 54px; left: 0; width: 100%; height: calc(100% - 54px); background-color: {{ $bgColor }}; border-top-left-radius: 40px; border-top-right-radius: 40px; z-index: 10; display: flex; flex-direction: column; overflow: hidden;">
+    <div style="position: absolute; top: 44px; left: 0; width: 100%; height: calc(100% - 44px); background-color: {{ $bgColor }}; z-index: 10; display: flex; flex-direction: column; overflow: hidden;">
         
         <div style="height: 50px; padding: 0 24px; display: flex; align-items: center; flex-shrink: 0; justify-content: flex-start;">
              <span style="color: #0A84FF; font-size: 18px; font-weight: 400;">Cancel</span>
@@ -88,7 +88,7 @@
                     </svg>
                 </div>
 
-                <div style="background-color: #ffffff; padding: 12px 6px; width: {{ $field['width'] }}; height: auto; display: flex; justify-content: center; align-items: center; border-radius: 2px; overflow: hidden; box-sizing: border-box;">
+                <div style="background-color: #ffffff; padding: 12px 6px; width: {{ $field['width'] }}; height: auto; display: flex; justify-content: center; align-items: center; border-radius: 2px; overflow: hidden; box-sizing: border-box; border: 1px solid #e0e0e0;">
                     <svg class="barcode-svg" 
                          data-value="{{ $field['val'] }}" 
                          data-format="CODE128" 
@@ -104,5 +104,6 @@
         </div>
     </div>
     
+    <!-- Hapus home indicator -->
     <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; background-color: {{ $textColor }}; border-radius: 100px; z-index: 20;"></div>
 </div>
