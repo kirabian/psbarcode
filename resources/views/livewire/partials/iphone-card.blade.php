@@ -1,6 +1,6 @@
 @php
     $isDark = ($item['theme'] ?? 'light') == 'dark';
-    // Gunakan warna kartu sebagai warna dasar utama untuk efek borderless total
+    // Gunakan warna kartu sebagai background utama agar pinggiran hitam hilang total
     $bgMain = $isDark ? '#1c1c1e' : '#ffffff';
     $bgCard = $isDark ? '#1c1c1e' : '#ffffff';
     $bgBack = $isDark ? '#141414' : '#d6d6d6';
@@ -61,7 +61,11 @@
 
         <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 90%; background-color: {{ $bgCard }}; border-top-left-radius: 40px; border-top-right-radius: 40px; z-index: 10; display: flex; flex-direction: column; overflow: hidden;">
             
-            <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; overflow: hidden; padding-top: 30px;">
+            <div style="height: 50px; padding: 0 24px; display: flex; align-items: center; flex-shrink: 0; justify-content: flex-start;">
+                 <span style="color: #0A84FF; font-size: 18px; font-weight: 400;">Cancel</span>
+            </div>
+
+            <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; overflow: hidden; padding-top: 0px; margin-top: -10px;">
                 
                 <div style="width: 100%; height: 50px; flex-shrink: 0; margin-bottom: 25px;">
                     <svg width="100%" height="50">
@@ -102,10 +106,6 @@
                     </div>
                 </div>
                 @endforeach
-
-                <div style="margin-top: auto; margin-bottom: 35px; width: 100%; display: flex; justify-content: center;">
-                    <span style="color: #0A84FF; font-size: 19px; font-weight: 400;">Cancel</span>
-                </div>
             </div>
         </div>
         
