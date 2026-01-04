@@ -2,11 +2,8 @@
     // Force white background only
     $bgColor = '#ffffff';
     $textColor = '#000000';
-    $headerColor = '#000000';
-    $labelColor = '#000000';
-
+    
     $battFillColor = ($item['batteryLevel'] ?? 100) < 20 ? '#FF3B30' : '#34C759';
-    $battTextColor = '#000000';
     
     $rawEid = (string)($item['eid'] ?? '');
     if (strlen($rawEid) < 33) {
@@ -19,79 +16,64 @@
     }
 @endphp
 
-<div id="{{ $id }}" style="width: 375px; height: 812px; background-color: {{ $bgColor }}; color: {{ $textColor }}; font-family: -apple-system, BlinkMacSystemFont, sans-serif; position: relative; overflow: hidden; box-sizing: border-box; -webkit-font-smoothing: antialiased; margin: 0; padding: 0;">
-    
-    <!-- Status Bar -->
-    <div style="display: flex; justify-content: space-between; padding: 18px 24px 0 24px; align-items: center; height: 44px; width: 100%; box-sizing: border-box; background-color: {{ $bgColor }};">
-        <div style="font-weight: 600; font-size: 15px; width: 54px; text-align: left; color: {{ $headerColor }};">
-            <svg width="60" height="20">
-                <text x="10" y="15" font-family="sans-serif" font-size="15" font-weight="600" fill="{{ $headerColor }}">{{ $item['hour'] }}:{{ $item['minute'] }}</text>
-            </svg>
-        </div>
+<div id="{{ $id }}" style="width: 375px; height: 812px; background-color: {{ $bgColor }}; color: {{ $textColor }}; font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; padding: 0; position: relative;">
 
-        <div style="display: flex; gap: 7px; align-items: center;">
-            <!-- Signal -->
-            <div style="display: flex; gap: 2.5px; align-items: center;">
+    <!-- Status Bar - Simplified -->
+    <div style="padding: 18px 24px 0 24px; height: 44px; display: flex; justify-content: space-between; align-items: center; background-color: {{ $bgColor }};">
+        <!-- Time -->
+        <div style="font-weight: 600; font-size: 15px; color: {{ $textColor }};">
+            {{ $item['hour'] }}:{{ $item['minute'] }}
+        </div>
+        
+        <!-- Status Icons -->
+        <div style="display: flex; align-items: center; gap: 7px;">
+            <!-- Signal Dots -->
+            <div style="display: flex; gap: 2.5px;">
                 @for($i=1; $i<=4; $i++)
-                    <div style="width: 3px; height: 3px; background-color: {{ $headerColor }}; border-radius: 50%; opacity: {{ ($item['signalStrength'] ?? 4) >= $i ? '1' : '0.2' }};"></div>
+                    <div style="width: 3px; height: 3px; background-color: {{ $textColor }}; border-radius: 50%; opacity: {{ ($item['signalStrength'] ?? 4) >= $i ? '1' : '0.2' }};"></div>
                 @endfor
             </div>
-
-            <!-- WiFi -->
-            <svg width="17" height="12" viewBox="0 0 17 12" fill="{{ $headerColor }}">
-                <path d="M8.5 12L6.5 9.5H10.5L8.5 12Z"/>
-                <path opacity="{{ ($item['wifiLevel'] ?? 3) >= 2 ? '1' : '0.3' }}" d="M8.5 4.5C6.6 4.5 4.9 5.2 3.6 6.4L5 7.8C5.9 7 7.1 6.5 8.5 6.5C9.9 6.5 11.1 7 12 7.8L13.4 6.4C12.1 5.2 10.4 4.5 8.5 4.5Z"/>
-                <path opacity="{{ ($item['wifiLevel'] ?? 3) >= 3 ? '1' : '0.3' }}" d="M8.5 0.5C5.3 0.5 2.3 1.8 0.3 4L1.7 5.4C3.4 3.7 5.8 2.5 8.5 2.5C11.2 2.5 13.6 3.7 15.3 5.4L16.7 4C14.7 1.8 11.7 0.5 8.5 0.5Z"/>
-            </svg>
-
-            <!-- Battery -->
+            
+            <!-- Battery - Simplified -->
             <div style="position: relative; width: 25px; height: 12px;">
                 <svg width="25" height="12" viewBox="0 0 25 12">
-                    <rect x="0.5" y="0.5" width="21" height="11" rx="2.5" stroke="{{ $headerColor }}" stroke-width="1" fill="none" opacity="0.35"/>
-                    <path d="M22.5 4C23.3 4 24 4.67 24 5.5V6.5C24 7.33 23.3 8 22.5 8V4Z" fill="{{ $headerColor }}" opacity="0.35"/>
                     <rect x="2" y="2" width="{{ $item['battWidth'] ?? 19 }}" height="8" rx="1.5" fill="{{ $battFillColor }}"/>
-                    <text x="11" y="6.5" font-family="sans-serif" font-size="6.5" font-weight="700" fill="{{ $battTextColor }}" text-anchor="middle" dominant-baseline="middle">{{ $item['batteryLevel'] }}</text>
+                    <text x="11" y="6.5" font-family="sans-serif" font-size="6.5" font-weight="700" fill="{{ $textColor }}" text-anchor="middle" dominant-baseline="middle">{{ $item['batteryLevel'] }}</text>
                 </svg>
             </div>
         </div>
     </div>
 
     <!-- Cancel Button -->
-    <div style="height: 50px; padding: 0 24px; display: flex; align-items: center; background-color: {{ $bgColor }};">
-         <span style="color: #0A84FF; font-size: 18px; font-weight: 400;">Cancel</span>
+    <div style="padding: 10px 24px 20px 24px; background-color: {{ $bgColor }};">
+        <span style="color: #0A84FF; font-size: 18px; font-weight: 400;">Cancel</span>
     </div>
 
-    <!-- Main Content -->
-    <div style="padding-top: 10px; background-color: {{ $bgColor }};">
-        <!-- Title -->
-        <div style="width: 100%; height: 50px; margin-bottom: 25px; display: flex; justify-content: center; align-items: center;">
-            <svg width="100%" height="50">
-                <text x="50%" y="30" font-family="sans-serif" font-size="34" font-weight="700" fill="{{ $textColor }}" text-anchor="middle">Device Info</text>
-            </svg>
-        </div>
+    <!-- Title -->
+    <div style="padding: 0 24px 30px 24px; background-color: {{ $bgColor }}; text-align: center;">
+        <div style="font-size: 34px; font-weight: 700; color: {{ $textColor }};">Device Info</div>
+    </div>
 
-        @php
-            $fields = [
-                ['label' => 'EID', 'val' => $finalEid, 'width' => '92%', 'barHeight' => 20],
-                ['label' => 'IMEI', 'val' => $item['imei1'], 'width' => '72%', 'barHeight' => 20],
-                ['label' => 'IMEI2', 'val' => $item['imei2'], 'width' => '72%', 'barHeight' => 20],
-                ['label' => 'MEID', 'val' => $item['meid'], 'width' => '62%', 'barHeight' => 20],
-            ];
-        @endphp
+    @php
+        $fields = [
+            ['label' => 'EID', 'val' => $finalEid, 'width' => '92%'],
+            ['label' => 'IMEI', 'val' => $item['imei1'], 'width' => '72%'],
+            ['label' => 'IMEI2', 'val' => $item['imei2'], 'width' => '72%'],
+            ['label' => 'MEID', 'val' => $item['meid'], 'width' => '62%'],
+        ];
+    @endphp
 
+    <!-- Device Info Items -->
+    <div style="padding: 0 24px; background-color: {{ $bgColor }};">
         @foreach($fields as $field)
-        <div style="margin-bottom: 30px; width: 100%; display: flex; flex-direction: column; align-items: center;">
+        <div style="margin-bottom: 30px; text-align: center;">
             <!-- Label -->
-            <div style="width: 100%; height: 20px; margin-bottom: 8px;">
-                <svg width="100%" height="20">
-                    <text x="50%" y="15" font-family="sans-serif" font-size="13" font-weight="500" fill="{{ $labelColor }}" text-anchor="middle">
-                        {{ $field['label'] }} {{ $field['val'] }}
-                    </text>
-                </svg>
+            <div style="font-size: 13px; font-weight: 500; color: {{ $textColor }}; margin-bottom: 8px;">
+                {{ $field['label'] }} {{ $field['val'] }}
             </div>
-
-            <!-- Barcode Container -->
-            <div style="background-color: #ffffff; padding: 12px 6px; width: {{ $field['width'] }}; height: auto; display: flex; justify-content: center; align-items: center; border-radius: 2px; overflow: hidden; box-sizing: border-box; border: 1px solid #e0e0e0;">
+            
+            <!-- Barcode Box -->
+            <div style="background-color: #ffffff; padding: 12px 6px; width: {{ $field['width'] }}; margin: 0 auto; border-radius: 2px; border: 1px solid #e0e0e0;">
                 <svg class="barcode-svg" 
                      data-value="{{ $field['val'] }}" 
                      data-format="CODE128" 
@@ -100,7 +82,7 @@
                      data-displayValue="false" 
                      data-margin="0"
                      preserveAspectRatio="none"
-                     style="width: 100%; height: {{ $field['barHeight'] }}px;"></svg>
+                     style="width: 100%; height: 20px;"></svg>
             </div>
         </div>
         @endforeach
