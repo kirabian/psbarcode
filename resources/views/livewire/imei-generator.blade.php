@@ -67,10 +67,10 @@
                         </button>
                         @if($viewMode == 'card')
                         <div class="flex gap-2 w-full sm:w-auto">
-                            <button onclick="downloadZip('double')" class="btn-zip flex-1 sm:flex-none px-4 py-2.5 bg-blue-600 text-white rounded-xl font-semibold text-xs hover:bg-blue-700 flex items-center justify-center gap-2 transition-all shadow-sm">
+                            <button onclick="downloadZip('double')" id="btn-zip-double" class="btn-zip flex-1 sm:flex-none px-4 py-2.5 bg-blue-600 text-white rounded-xl font-semibold text-xs hover:bg-blue-700 flex items-center justify-center gap-2 transition-all shadow-sm">
                                 <span class="mdi mdi-zip-box"></span> ZIP Double
                             </button>
-                            <button onclick="downloadZip('single')" class="btn-zip flex-1 sm:flex-none px-4 py-2.5 bg-orange-600 text-white rounded-xl font-semibold text-xs hover:bg-orange-700 flex items-center justify-center gap-2 transition-all shadow-sm">
+                            <button onclick="downloadZip('single')" id="btn-zip-single" class="btn-zip flex-1 sm:flex-none px-4 py-2.5 bg-orange-600 text-white rounded-xl font-semibold text-xs hover:bg-orange-700 flex items-center justify-center gap-2 transition-all shadow-sm">
                                 <span class="mdi mdi-zip-box"></span> ZIP Single
                             </button>
                         </div>
@@ -164,7 +164,7 @@
                                 <div class="flex gap-2">
                                     <button wire:click="checkIcloud('{{ $leftoverSingle }}')" class="flex-1 py-2.5 rounded-xl text-[10px] font-bold transition-all {{ isset($icloudStatus[$leftoverSingle]) && $icloudStatus[$leftoverSingle]['status'] == 'ON' ? 'bg-emerald-500 text-white' : (isset($icloudStatus[$leftoverSingle]) && $icloudStatus[$leftoverSingle]['status'] == 'OFF' ? 'bg-red-500 text-white' : 'bg-zinc-100 text-zinc-700') }}">{{ $icloudStatus[$leftoverSingle]['status'] ?? 'CHECK SINGLE' }}</button>
                                     @if ($viewMode == 'card')
-                                        <button wire:click="openCard('{{ $leftoverSingle }}', null)" class="px-4 py-2.5 bg-red-500 text-white rounded-xl font-bold text-[10px]">CARD</button>
+                                        <button wire:click="openCard('{{ $leftoverSingle }}', null)" class="px-4 py-2.5 bg-red-50 text-white rounded-xl font-bold text-[10px]">CARD</button>
                                     @endif
                                 </div>
                             </div>
@@ -202,82 +202,80 @@
 
         async function downloadZip(type) {
             const zip = new JSZip();
-            const btns = document.querySelectorAll('.btn-zip');
+            const btn = document.getElementById('btn-zip-' + type);
+            const otherBtn = document.getElementById('btn-zip-' + (type === 'double' ? 'single' : 'double'));
+            const originalText = btn.innerHTML;
             const tempArea = document.getElementById('zip-temp-area');
-            
-            // Lock semua tombol zip
-            btns.forEach(b => {
-                b.disabled = true;
-                b.classList.add('opacity-50', 'cursor-not-allowed');
-            });
-            
-            const activeBtn = Array.from(btns).find(b => b.innerText.toLowerCase().includes(type));
-            const originalText = activeBtn.innerHTML;
+
+            // LOCK BUTTONS
+            btn.disabled = true;
+            if(otherBtn) otherBtn.disabled = true;
+            btn.classList.add('opacity-75', 'cursor-wait');
 
             try {
-                // Ambil data sesuai type
                 const data = (type === 'double') 
                     ? await @this.getDoubleDataForZip() 
                     : await @this.getSingleDataForZip();
 
                 if (data.length === 0) {
-                    alert('Tidak ada data untuk kategori ini.');
+                    alert('Tidak ada data.');
+                    restoreButtons();
                     return;
                 }
 
                 for (let i = 0; i < data.length; i++) {
                     const item = data[i];
-                    activeBtn.innerHTML = `<span class="mdi mdi-loading mdi-spin"></span> Render ${i+1}/${data.length}`;
+                    // UPDATE PROGRESS ON BUTTON
+                    btn.innerHTML = `<span class="mdi mdi-loading mdi-spin"></span> Process ${i+1}/${data.length}`;
                     
                     tempArea.innerHTML = item.html;
                     
-                    // Inisialisasi barcode
                     const barcodeElements = tempArea.querySelectorAll(".barcode-svg");
                     barcodeElements.forEach(el => {
                         const val = el.getAttribute('data-value');
                         if (val && val !== '') JsBarcode(el).init();
                     });
                     
-                    // Tunggu DOM & Barcode siap
-                    await new Promise(r => setTimeout(r, 250));
+                    // Delay for DOM safety
+                    await new Promise(r => setTimeout(r, 300));
                     
                     const canvas = await html2canvas(tempArea.firstChild, { 
-                        scale: 2, 
+                        scale: 2.5, 
                         useCORS: true, 
                         backgroundColor: null,
                         logging: false
                     });
                     
-                    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
-                    zip.file(`IMEI_${item.imei1}.png`, blob);
-                    
-                    // Bersihkan memori DOM
+                    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png', 1.0));
+                    zip.file(`${type.toUpperCase()}_${item.imei1}.png`, blob);
                     tempArea.innerHTML = '';
                 }
                 
-                activeBtn.innerHTML = `<span class="mdi mdi-loading mdi-spin"></span> Packing...`;
+                btn.innerHTML = `<span class="mdi mdi-loading mdi-spin"></span> Compressing...`;
                 const content = await zip.generateAsync({type: "blob"});
-                saveAs(content, `Barcodes_${type.toUpperCase()}_${Date.now()}.zip`);
+                saveAs(content, `IMEI_${type.toUpperCase()}_${Date.now()}.zip`);
                 
             } catch (error) {
-                console.error('ZIP Error:', error);
-                alert('Terjadi kesalahan saat memproses gambar.');
+                console.error(error);
+                alert('Rendering failed. Please try a smaller batch.');
             } finally {
-                // Restore UI
-                activeBtn.innerHTML = originalText;
-                btns.forEach(b => {
-                    b.disabled = false;
-                    b.classList.remove('opacity-50', 'cursor-not-allowed');
-                });
+                restoreButtons();
+            }
+
+            function restoreButtons() {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                if(otherBtn) otherBtn.disabled = false;
+                btn.classList.remove('opacity-75', 'cursor-wait');
             }
         }
 
         function downloadCardPng() {
             const area = document.getElementById('capture-area').firstElementChild;
-            html2canvas(area, { scale: 3, useCORS: true, backgroundColor: null, logging: false }).then(canvas => {
+            html2canvas(area, { scale: 3.5, useCORS: true, backgroundColor: null, logging: false }).then(canvas => {
                 const link = document.createElement('a');
                 link.download = `DeviceInfo-${Date.now()}.png`;
-                link.href = canvas.toDataURL('image/png');
+                link.href = canvas.toDataURL('image/png', 1.0);
                 link.click();
             });
         }

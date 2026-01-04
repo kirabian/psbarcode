@@ -90,7 +90,6 @@ class ImeiGenerator extends Component
         ];
     }
 
-    // Ambil data khusus untuk ZIP Double
     public function getDoubleDataForZip() {
         $data = [];
         $view = ($this->selectedCardType == 'iphone14') ? 'livewire.partials.iphone-14-card' : 'livewire.partials.iphone-card';
@@ -105,7 +104,6 @@ class ImeiGenerator extends Component
         return $data;
     }
 
-    // Ambil data khusus untuk ZIP Single
     public function getSingleDataForZip() {
         $data = [];
         $view = ($this->selectedCardType == 'iphone14') ? 'livewire.partials.iphone-14-card' : 'livewire.partials.iphone-card';
