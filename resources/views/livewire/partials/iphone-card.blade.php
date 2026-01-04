@@ -1,6 +1,6 @@
 @php
     $isDark = ($item['theme'] ?? 'light') == 'dark';
-    // Bezel utama hitam dibuat sangat tipis di pinggir
+    // Bezel hitam diatur menjadi garis tepi yang sangat tipis
     $bgMain = '#000000'; 
     $bgCard = $isDark ? '#1c1c1e' : '#ffffff';
     $bgBack = $isDark ? '#141414' : '#d6d6d6';
@@ -30,10 +30,10 @@
 
 <div id="{{ $id }}" class="iphone-screen" style="width: 375px; height: 812px; background-color: {{ $bgMain }}; color: {{ $textColor }}; font-family: -apple-system, BlinkMacSystemFont, sans-serif; position: relative; overflow: hidden; flex-shrink: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; border-radius: 55px;">
     
-    <div style="display: flex; justify-content: space-between; padding: 14px 26px 0 26px; align-items: center; height: 44px; position: absolute; top: 0; left: 0; width: 100%; z-index: 50; box-sizing: border-box;">
+    <div style="display: flex; justify-content: space-between; padding: 16px 26px 0 26px; align-items: center; height: 44px; position: absolute; top: 0; left: 0; width: 100%; z-index: 50; box-sizing: border-box;">
         <div style="font-weight: 600; font-size: 15px; width: 54px; text-align: left; color: {{ $headerColor }};">
             <svg width="60" height="20">
-                <text x="15" y="15" font-family="sans-serif" font-size="15" font-weight="600" fill="{{ $headerColor }}">{{ $item['hour'] }}:{{ $item['minute'] }}</text>
+                <text x="12" y="15" font-family="sans-serif" font-size="15" font-weight="600" fill="{{ $headerColor }}">{{ $item['hour'] }}:{{ $item['minute'] }}</text>
             </svg>
         </div>
 
@@ -61,11 +61,11 @@
         </div>
     </div>
 
-    <div style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 99.5%; height: 92%; background-color: {{ $bgBack }}; border-top-left-radius: 40px; border-top-right-radius: 40px; z-index: 8;"></div>
+    <div style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 99.4%; height: 92%; background-color: {{ $bgBack }}; border-top-left-radius: 40px; border-top-right-radius: 40px; z-index: 8;"></div>
 
     <div style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 99%; height: 90%; background-color: {{ $bgCard }}; border-top-left-radius: 40px; border-top-right-radius: 40px; z-index: 10; display: flex; flex-direction: column; overflow: hidden;">
         
-        <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; overflow: hidden; padding-top: 25px;">
+        <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; overflow: hidden; padding-top: 30px;">
             
             <div style="width: 100%; height: 50px; flex-shrink: 0; margin-bottom: 25px;">
                 <svg width="100%" height="50">
@@ -83,9 +83,9 @@
             @endphp
 
             @foreach($fields as $field)
-            <div style="margin-bottom: 30px; width: 100%; display: flex; flex-direction: column; align-items: center; flex-shrink: 0;">
+            <div style="margin-bottom: 35px; width: 100%; display: flex; flex-direction: column; align-items: center; flex-shrink: 0;">
                 
-                <div style="width: 100%; height: 20px; margin-bottom: 8px;">
+                <div style="width: 100%; height: 20px; margin-bottom: 10px;">
                     <svg width="100%" height="20">
                         <text x="50%" y="15" font-family="sans-serif" font-size="13" font-weight="500" fill="{{ $labelColor }}" text-anchor="middle">
                             {{ $field['label'] }} {{ $field['val'] }}
@@ -107,7 +107,7 @@
             </div>
             @endforeach
 
-            <div style="margin-top: auto; margin-bottom: 30px; width: 100%; display: flex; justify-content: center;">
+            <div style="margin-top: auto; margin-bottom: 40px; width: 100%; display: flex; justify-content: center;">
                  <span style="color: #0A84FF; font-size: 20px; font-weight: 400; cursor: pointer;">Cancel</span>
             </div>
         </div>
