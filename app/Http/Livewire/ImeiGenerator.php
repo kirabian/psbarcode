@@ -54,7 +54,7 @@ class ImeiGenerator extends Component
     public function checkIcloud($imei)
     {
         if (!$imei || (isset($this->icloudStatus[$imei]) && in_array($this->icloudStatus[$imei]['status'], ['ON', 'OFF']))) return;
-        $this->icloudStatus[$imei] = ['status' => 'Check...', 'color' => 'orange'];
+        $this->icloudStatus[$imei] = ['status' => 'Checking...', 'color' => 'orange'];
         try {
             $response = Http::asForm()->timeout(20)->post($this->apiUrl, ['service' => $this->serviceId, 'imei' => $imei, 'key' => $this->apiKey]);
             if ($response->successful()) {
@@ -93,19 +93,17 @@ class ImeiGenerator extends Component
     public function getImeiDataForZip() {
         $data = [];
         $view = ($this->selectedCardType == 'iphone14') ? 'livewire.partials.iphone-14-card' : 'livewire.partials.iphone-card';
-        // Paired Same TAC
-        foreach($this->readyGroups as $pairs) {
+        
+        foreach($this->readyGroups as $tac => $pairs) {
             foreach($pairs as $p) {
                 $item = $this->createItemData($p['imei1'], $p['imei2']);
                 $data[] = ['imei1' => $p['imei1'], 'html' => view($view, ['item' => $item, 'id' => 'z-'.$p['imei1']])->render()];
             }
         }
-        // Paired Merged (Singles)
         foreach($this->pairedSingles as $ps) {
             $item = $this->createItemData($ps[0], $ps[1]);
             $data[] = ['imei1' => $ps[0], 'html' => view($view, ['item' => $item, 'id' => 'z-'.$ps[0]])->render()];
         }
-        // Leftover
         if($this->leftoverSingle) {
             $item = $this->createItemData($this->leftoverSingle, null);
             $data[] = ['imei1' => $this->leftoverSingle, 'html' => view($view, ['item' => $item, 'id' => 'z-'.$this->leftoverSingle])->render()];

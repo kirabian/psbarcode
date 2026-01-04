@@ -103,26 +103,22 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 text-center">
                     @if (!empty($readyGroups))
                         <div class="space-y-4">
-                            <div class="flex items-center gap-2 px-2"><div class="w-1 h-6 bg-blue-500 rounded-full"></div><h3 class="font-bold text-blue-600 text-sm">Paired (Same TAC)</h3></div>
+                            <div class="flex items-center gap-2 px-2"><div class="w-1 h-6 bg-blue-500 rounded-full"></div><h3 class="font-bold text-blue-600 text-sm uppercase">Paired (TAC)</h3></div>
                             @foreach ($readyGroups as $tac => $pairs)
                                 @foreach ($pairs as $item)
-                                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-zinc-200 group">
+                                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-zinc-200">
                                         <div class="grid grid-cols-2 gap-4 mb-4 font-mono text-xs">
-                                            <div><p class="text-blue-600 font-bold mb-1 tracking-tight">IMEI 1</p><p class="font-black text-zinc-900 select-all">{{ $item['imei1'] }}</p></div>
-                                            <div><p class="text-zinc-400 font-bold mb-1 tracking-tight">IMEI 2</p><p class="font-black text-zinc-900 select-all">{{ $item['imei2'] }}</p></div>
+                                            <div><p class="text-blue-600 font-bold mb-1 tracking-tight">IMEI 1</p><p class="font-black text-zinc-900">{{ $item['imei1'] }}</p></div>
+                                            <div><p class="text-zinc-400 font-bold mb-1 tracking-tight">IMEI 2</p><p class="font-black text-zinc-900">{{ $item['imei2'] }}</p></div>
                                         </div>
                                         <div class="flex gap-2">
-                                            <button wire:click="checkIcloud('{{ $item['imei1'] }}')" wire:loading.attr="disabled" class="flex-1 py-2.5 rounded-xl text-[10px] font-bold transition-all {{ isset($icloudStatus[$item['imei1']]) && $icloudStatus[$item['imei1']]['status'] == 'ON' ? 'bg-emerald-500 text-white' : (isset($icloudStatus[$item['imei1']]) && $icloudStatus[$item['imei1']]['status'] == 'OFF' ? 'bg-red-500 text-white' : 'bg-zinc-100 text-zinc-700') }}">
-                                                {{ $icloudStatus[$item['imei1']]['status'] ?? 'Check 1' }}
-                                            </button>
-                                            <button wire:click="checkIcloud('{{ $item['imei2'] }}')" wire:loading.attr="disabled" class="flex-1 py-2.5 rounded-xl text-[10px] font-bold transition-all {{ isset($icloudStatus[$item['imei2']]) && $icloudStatus[$item['imei2']]['status'] == 'ON' ? 'bg-emerald-500 text-white' : (isset($icloudStatus[$item['imei2']]) && $icloudStatus[$item['imei2']]['status'] == 'OFF' ? 'bg-red-500 text-white' : 'bg-zinc-100 text-zinc-700') }}">
-                                                {{ $icloudStatus[$item['imei2']]['status'] ?? 'Check 2' }}
-                                            </button>
+                                            <button wire:click="checkIcloud('{{ $item['imei1'] }}')" class="flex-1 py-2.5 rounded-xl text-[10px] font-bold transition-all {{ isset($icloudStatus[$item['imei1']]) && $icloudStatus[$item['imei1']]['status'] == 'ON' ? 'bg-emerald-500 text-white' : (isset($icloudStatus[$item['imei1']]) && $icloudStatus[$item['imei1']]['status'] == 'OFF' ? 'bg-red-500 text-white' : 'bg-zinc-100 text-zinc-700') }}">{{ $icloudStatus[$item['imei1']]['status'] ?? 'CHECK 1' }}</button>
+                                            <button wire:click="checkIcloud('{{ $item['imei2'] }}')" class="flex-1 py-2.5 rounded-xl text-[10px] font-bold transition-all {{ isset($icloudStatus[$item['imei2']]) && $icloudStatus[$item['imei2']]['status'] == 'ON' ? 'bg-emerald-500 text-white' : (isset($icloudStatus[$item['imei2']]) && $icloudStatus[$item['imei2']]['status'] == 'OFF' ? 'bg-red-500 text-white' : 'bg-zinc-100 text-zinc-700') }}">{{ $icloudStatus[$item['imei2']]['status'] ?? 'CHECK 2' }}</button>
                                             @if ($viewMode == 'card')
-                                                <button wire:click="openCard('{{ $item['imei1'] }}', '{{ $item['imei2'] }}')" class="px-4 py-2.5 bg-blue-500 text-white rounded-xl font-bold text-[10px] hover:bg-blue-600 transition-transform active:scale-95">CARD</button>
+                                                <button wire:click="openCard('{{ $item['imei1'] }}', '{{ $item['imei2'] }}')" class="px-4 py-2.5 bg-blue-500 text-white rounded-xl font-bold text-[10px]">CARD</button>
                                             @endif
                                         </div>
                                     </div>
@@ -133,18 +129,18 @@
 
                     <div class="space-y-4">
                         @if (!empty($pairedSingles))
-                            <div class="flex items-center gap-2 px-2"><div class="w-1 h-6 bg-orange-500 rounded-full"></div><h3 class="font-bold text-orange-600 text-sm">Singles (Merged)</h3></div>
+                            <div class="flex items-center gap-2 px-2"><div class="w-1 h-6 bg-orange-500 rounded-full"></div><h3 class="font-bold text-orange-600 text-sm uppercase">Merged</h3></div>
                             @foreach ($pairedSingles as $pair)
-                                <div class="bg-white p-4 rounded-2xl shadow-sm border border-zinc-200 group">
+                                <div class="bg-white p-4 rounded-2xl shadow-sm border border-zinc-200">
                                     <div class="grid grid-cols-2 gap-4 mb-4 font-mono text-xs">
-                                        <div><p class="text-orange-600 font-bold mb-1 tracking-tight">IMEI A</p><p class="font-black text-zinc-900 select-all">{{ $pair[0] }}</p></div>
-                                        <div><p class="text-orange-600 font-bold mb-1 tracking-tight">IMEI B</p><p class="font-black text-zinc-900 select-all">{{ $pair[1] }}</p></div>
+                                        <div><p class="text-orange-600 font-bold mb-1 tracking-tight">IMEI A</p><p class="font-black text-zinc-900">{{ $pair[0] }}</p></div>
+                                        <div><p class="text-orange-600 font-bold mb-1 tracking-tight">IMEI B</p><p class="font-black text-zinc-900">{{ $pair[1] }}</p></div>
                                     </div>
                                     <div class="flex gap-2">
-                                        <button wire:click="checkIcloud('{{ $pair[0] }}')" class="flex-1 py-2.5 rounded-xl text-[10px] font-bold transition-all {{ isset($icloudStatus[$pair[0]]) && $icloudStatus[$pair[0]]['status'] == 'ON' ? 'bg-emerald-500 text-white' : (isset($icloudStatus[$pair[0]]) && $icloudStatus[$pair[0]]['status'] == 'OFF' ? 'bg-red-500 text-white' : 'bg-zinc-100 text-zinc-700') }}">{{ $icloudStatus[$pair[0]]['status'] ?? 'Check A' }}</button>
-                                        <button wire:click="checkIcloud('{{ $pair[1] }}')" class="flex-1 py-2.5 rounded-xl text-[10px] font-bold transition-all {{ isset($icloudStatus[$pair[1]]) && $icloudStatus[$pair[1]]['status'] == 'ON' ? 'bg-emerald-500 text-white' : (isset($icloudStatus[$pair[1]]) && $icloudStatus[$pair[1]]['status'] == 'OFF' ? 'bg-red-500 text-white' : 'bg-zinc-100 text-zinc-700') }}">{{ $icloudStatus[$pair[1]]['status'] ?? 'Check B' }}</button>
+                                        <button wire:click="checkIcloud('{{ $pair[0] }}')" class="flex-1 py-2.5 rounded-xl text-[10px] font-bold transition-all {{ isset($icloudStatus[$pair[0]]) && $icloudStatus[$pair[0]]['status'] == 'ON' ? 'bg-emerald-500 text-white' : (isset($icloudStatus[$pair[0]]) && $icloudStatus[$pair[0]]['status'] == 'OFF' ? 'bg-red-500 text-white' : 'bg-zinc-100 text-zinc-700') }}">{{ $icloudStatus[$pair[0]]['status'] ?? 'CHECK A' }}</button>
+                                        <button wire:click="checkIcloud('{{ $pair[1] }}')" class="flex-1 py-2.5 rounded-xl text-[10px] font-bold transition-all {{ isset($icloudStatus[$pair[1]]) && $icloudStatus[$pair[1]]['status'] == 'ON' ? 'bg-emerald-500 text-white' : (isset($icloudStatus[$pair[1]]) && $icloudStatus[$pair[1]]['status'] == 'OFF' ? 'bg-red-500 text-white' : 'bg-zinc-100 text-zinc-700') }}">{{ $icloudStatus[$pair[1]]['status'] ?? 'CHECK B' }}</button>
                                         @if ($viewMode == 'card')
-                                            <button wire:click="openCard('{{ $pair[0] }}', '{{ $pair[1] }}')" class="px-4 py-2.5 bg-orange-500 text-white rounded-xl font-bold text-[10px] hover:bg-orange-600 transition-transform active:scale-95">CARD</button>
+                                            <button wire:click="openCard('{{ $pair[0] }}', '{{ $pair[1] }}')" class="px-4 py-2.5 bg-orange-500 text-white rounded-xl font-bold text-[10px]">CARD</button>
                                         @endif
                                     </div>
                                 </div>
@@ -152,13 +148,13 @@
                         @endif
 
                         @if ($leftoverSingle)
-                            <div class="flex items-center gap-2 px-2 mt-6"><div class="w-1 h-6 bg-red-500 rounded-full"></div><h3 class="font-bold text-red-600 text-sm">Leftover (Odd)</h3></div>
+                            <div class="flex items-center gap-2 px-2 mt-6"><div class="w-1 h-6 bg-red-500 rounded-full"></div><h3 class="font-bold text-red-600 text-sm uppercase">Odd</h3></div>
                             <div class="bg-white p-4 rounded-2xl shadow-sm border border-zinc-200">
-                                <div class="mb-4 font-mono text-xs font-black text-zinc-900 select-all">{{ $leftoverSingle }}</div>
+                                <div class="mb-4 font-mono text-xs font-black text-zinc-900">{{ $leftoverSingle }}</div>
                                 <div class="flex gap-2">
-                                    <button wire:click="checkIcloud('{{ $leftoverSingle }}')" class="flex-1 py-2.5 rounded-xl text-[10px] font-bold transition-all {{ isset($icloudStatus[$leftoverSingle]) && $icloudStatus[$leftoverSingle]['status'] == 'ON' ? 'bg-emerald-500 text-white' : (isset($icloudStatus[$leftoverSingle]) && $icloudStatus[$leftoverSingle]['status'] == 'OFF' ? 'bg-red-500 text-white' : 'bg-zinc-100 text-zinc-700') }}">{{ $icloudStatus[$leftoverSingle]['status'] ?? 'Check Single' }}</button>
+                                    <button wire:click="checkIcloud('{{ $leftoverSingle }}')" class="flex-1 py-2.5 rounded-xl text-[10px] font-bold transition-all {{ isset($icloudStatus[$leftoverSingle]) && $icloudStatus[$leftoverSingle]['status'] == 'ON' ? 'bg-emerald-500 text-white' : (isset($icloudStatus[$leftoverSingle]) && $icloudStatus[$leftoverSingle]['status'] == 'OFF' ? 'bg-red-500 text-white' : 'bg-zinc-100 text-zinc-700') }}">{{ $icloudStatus[$leftoverSingle]['status'] ?? 'CHECK SINGLE' }}</button>
                                     @if ($viewMode == 'card')
-                                        <button wire:click="openCard('{{ $leftoverSingle }}', null)" class="px-4 py-2.5 bg-red-500 text-white rounded-xl font-bold text-[10px] hover:bg-red-600 transition-transform active:scale-95">CARD</button>
+                                        <button wire:click="openCard('{{ $leftoverSingle }}', null)" class="px-4 py-2.5 bg-red-500 text-white rounded-xl font-bold text-[10px]">CARD</button>
                                     @endif
                                 </div>
                             </div>
@@ -176,7 +172,7 @@
                     <button onclick="downloadCard()" class="px-5 py-3 bg-emerald-500 text-white rounded-2xl font-bold text-xs shadow-lg hover:bg-emerald-600 transition-all active:scale-95">Download JPG</button>
                     <button wire:click="closeModal" class="px-5 py-3 bg-white/10 text-white rounded-2xl font-bold text-xs hover:bg-white/20 transition-all">Close</button>
                 </div>
-                <div id="capture-area" class="rounded-[50px] overflow-hidden shadow-2xl flex justify-center bg-black scale-90 sm:scale-100 transition-transform">
+                <div id="capture-area" class="rounded-[50px] overflow-hidden shadow-2xl flex justify-center bg-black scale-90 sm:scale-100">
                     @if($selectedItem['deviceModel'] == 'iphone14')
                         @include('livewire.partials.iphone-14-card', ['item' => $selectedItem, 'id' => 'ios-card-14'])
                     @else
@@ -205,16 +201,26 @@
                 const tempArea = document.getElementById('zip-temp-area');
                 for (const item of data) {
                     tempArea.innerHTML = item.html;
-                    JsBarcode(tempArea.querySelector(".barcode-svg")).init();
+                    
+                    // Inisialisasi barcode secara spesifik agar tidak terlewat
+                    const barcodeElements = tempArea.querySelectorAll(".barcode-svg");
+                    barcodeElements.forEach(el => {
+                        const val = el.getAttribute('data-value');
+                        if (val && val !== '') JsBarcode(el).init();
+                    });
+                    
+                    // Tunggu render sebentar
+                    await new Promise(r => setTimeout(r, 100));
+                    
                     const canvas = await html2canvas(tempArea.firstChild, { scale: 2, useCORS: true, backgroundColor: '#000' });
                     const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.8));
                     zip.file(`IMEI_${item.imei1}.jpg`, blob);
+                    tempArea.innerHTML = '';
                 }
                 const content = await zip.generateAsync({type: "blob"});
                 saveAs(content, `Barcodes_${Date.now()}.zip`);
                 btn.innerHTML = originalText;
                 btn.disabled = false;
-                tempArea.innerHTML = '';
             });
         }
 
