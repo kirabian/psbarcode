@@ -10,12 +10,23 @@
     $closeBtnBg = $isDark ? '#1c1c1e' : '#ffffff';
     $closeIcon = $isDark ? '#ffffff' : '#3c3c43';
 
-    $currentPercent = (int) ($item['batteryLevel'] ?? 100);
+    // Logika Baterai Random & Warna Dinamis
+    $currentPercent = $item['batteryLevel'] ?? mt_rand(5, 100);
     $battWidth = ($currentPercent / 100) * 19;
-    $battFillColor = $currentPercent <= 20 ? '#FF3B30' : ($currentPercent <= 35 ? '#FFD60A' : '#34C759');
+    
+    // Penentuan Warna: Merah (Low), Kuning (Hemat/Low), Hijau (Normal)
+    if ($currentPercent <= 20) {
+        $battFillColor = '#FF3B30'; // Merah
+    } elseif ($currentPercent <= 35) {
+        $battFillColor = '#FFD60A'; // Kuning (Mode Hemat)
+    } else {
+        $battFillColor = '#34C759'; // Hijau
+    }
     $battTextColor = '#ffffff';
 
-    $wifiLevel = $item['wifiLevel'] ?? 3;
+    // Logika WiFi Random (Probabilitas 50/50 muncul atau tidak)
+    $showWifi = $item['showWifi'] ?? (mt_rand(0, 1) == 1);
+    $wifiLevel = $item['wifiLevel'] ?? mt_rand(1, 3);
 
     $randomEid = $item['eid'] ?? '';
     if (strlen($randomEid) < 33) {
@@ -50,7 +61,7 @@
                 @endfor
             </div>
 
-            @if ($wifiLevel > 0)
+            @if ($showWifi && $wifiLevel > 0)
                 <svg width="17" height="12" viewBox="0 0 17 12">
                     <path d="M8.5 12L6.5 9.5H10.5L8.5 12Z" fill="{{ $wifiColor }}" />
                     <path opacity="{{ $wifiLevel >= 2 ? '1' : '0.3' }}"
