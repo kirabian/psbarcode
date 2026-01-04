@@ -81,10 +81,12 @@ class ImeiGenerator extends Component
     }
 
     private function createItemData($imei1, $imei2 = null, $theme = 'light') {
+        // Perbaikan: Jam & Menit diacak menggunakan mt_rand
         return [
             'imei1' => $imei1, 'imei2' => $imei2 ?: $imei1, 'meid' => substr($imei1, 0, 14),
             'eid' => '8904' . mt_rand(10000000, 99999999) . mt_rand(10000000, 99999999),
-            'hour' => now()->format('H'), 'minute' => now()->format('i'),
+            'hour' => str_pad(mt_rand(1, 23), 2, '0', STR_PAD_LEFT), 
+            'minute' => str_pad(mt_rand(0, 59), 2, '0', STR_PAD_LEFT),
             'batteryLevel' => rand(45, 95), 'theme' => $theme,
             'deviceModel' => $this->selectedCardType
         ];
