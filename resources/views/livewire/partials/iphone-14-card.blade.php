@@ -37,11 +37,11 @@
     <div
         style="display: flex; justify-content: space-between; padding: 0 26px; align-items: center; position: absolute; top: 11px; left: 0; width: 100%; height: 44px; z-index: 150; box-sizing: border-box;">
         <svg width="60" height="44">
-            <text x="15" y="28" font-family="sans-serif" font-size="16" font-weight="600" fill="{{ $headerColor }}"
+            <text x="5" y="25" font-family="sans-serif" font-size="16" font-weight="600" fill="{{ $headerColor }}"
                 letter-spacing="-0.3px">{{ $item['hour'] ?? '09' }}:{{ $item['minute'] ?? '41' }}</text>
         </svg>
 
-        <div style="display: flex; gap: 8px; align-items: center; margin-top: 1px;">
+        <div style="display: flex; gap: 8px; align-items: center; margin-top: -6px;">
             <div style="display: flex; gap: 2.5px; align-items: center;">
                 @for ($i = 1; $i <= 4; $i++)
                     <div
