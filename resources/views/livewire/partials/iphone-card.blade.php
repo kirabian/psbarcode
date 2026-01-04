@@ -1,6 +1,6 @@
 @php
     $isDark = ($item['theme'] ?? 'light') == 'dark';
-    // Hilangkan warna hitam, langsung gunakan warna kartu agar borderless
+    // Gunakan warna kartu sebagai warna dasar utama untuk efek borderless total
     $bgMain = $isDark ? '#1c1c1e' : '#ffffff';
     $bgCard = $isDark ? '#1c1c1e' : '#ffffff';
     $bgBack = $isDark ? '#141414' : '#d6d6d6';
@@ -22,7 +22,7 @@
     }
 @endphp
 
-<div id="{{ $id }}" class="iphone-screen" style="width: 375px; height: 812px; color: {{ $textColor }}; font-family: -apple-system, BlinkMacSystemFont, sans-serif; position: relative; overflow: hidden; flex-shrink: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; background-color: {{ $bgMain }}; border-radius: 50px;">
+<div id="{{ $id }}" class="iphone-screen" style="width: 375px; height: 812px; color: {{ $textColor }}; font-family: -apple-system, BlinkMacSystemFont, sans-serif; position: relative; overflow: hidden; flex-shrink: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; background-color: {{ $bgMain }}; border-radius: 40px;">
     
     <div style="width: 100%; height: 100%; position: relative; overflow: hidden;">
         
