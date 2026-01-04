@@ -21,110 +21,56 @@
     }
 @endphp
 
-<div id="{{ $id }}" class="iphone-screen"
-     style="width:375px;height:812px;background:#000;color:{{ $textColor }};
-     font-family:-apple-system,BlinkMacSystemFont,sans-serif;
-     position:relative;overflow:hidden;padding:2px;box-sizing:border-box;">
-
-    <div style="width:100%;height:100%;background:{{ $bgMain }};
-                border-radius:40px;position:relative;overflow:hidden;">
-
-        {{-- STATUS BAR --}}
-        <div style="display:flex;justify-content:space-between;
-                    padding:14px 26px 0;height:44px;
-                    position:absolute;top:0;width:100%;z-index:50;">
-            <div style="font-weight:600;font-size:15px;color:{{ $headerColor }};">
-                {{ $item['hour'] }}:{{ $item['minute'] }}
-            </div>
-            <div style="display:flex;align-items:center;gap:6px;">
-                <span>{{ $item['batteryLevel'] }}%</span>
-            </div>
-        </div>
-
-        {{-- BACK LAYER --}}
-        <div style="position:absolute;bottom:0;left:50%;
-            transform:translateX(-50%);
-            width:94%;height:92%;
-            background:{{ $bgBack }};
-            border-top-left-radius:45px;
-            border-top-right-radius:45px;
-            z-index:8;"></div>
-
-        {{-- ============================= --}}
-        {{-- EXPORT AREA (YANG DI DOWNLOAD) --}}
-        {{-- ============================= --}}
-        <div class="export-area"
-             style="position:absolute;bottom:0;left:0;width:100%;height:90%;
-             background:{{ $bgCard }};
-             border-top-left-radius:45px;
-             border-top-right-radius:45px;
-             z-index:10;
-             display:flex;
-             flex-direction:column;
-             overflow:hidden;">
-
-            {{-- HEADER --}}
-            <div style="height:50px;padding:0 24px;display:flex;align-items:center;">
-                <span style="color:#0A84FF;font-size:18px;">Cancel</span>
+<div id="{{ $id }}" class="iphone-screen" style="width: 375px; height: 812px; background-color: #000000; color: {{ $textColor }}; font-family: -apple-system, BlinkMacSystemFont, sans-serif; position: relative; overflow: hidden; flex-shrink: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; padding: 2px;">
+    
+    <div style="width: 100%; height: 100%; background-color: {{ $bgMain }}; border-radius: 40px; position: relative; overflow: hidden;">
+        
+        <div style="display: flex; justify-content: space-between; padding: 14px 26px 0 26px; align-items: center; height: 44px; position: absolute; top: 0; left: 0; width: 100%; z-index: 50; box-sizing: border-box;">
+            <div style="font-weight: 600; font-size: 15px; width: 54px; text-align: left; color: {{ $headerColor }};">
+                <svg width="60" height="20">
+                    <text x="15" y="15" font-family="sans-serif" font-size="15" font-weight="600" fill="{{ $headerColor }}">{{ $item['hour'] }}:{{ $item['minute'] }}</text>
+                </svg>
             </div>
 
-            {{-- CONTENT --}}
-            <div style="flex:1;display:flex;flex-direction:column;
-                        align-items:center;margin-top:-10px;">
+            <div style="display: flex; gap: 7px; align-items: center;">
+                <div style="display: flex; gap: 2.5px; align-items: center;">
+                    @for($i=1; $i<=4; $i++)
+                        <div style="width: 3px; height: 3px; background-color: {{ $headerColor }}; border-radius: 50%; opacity: {{ ($item['signalStrength'] ?? 4) >= $i ? '1' : '0.2' }};"></div>
+                    @endfor
+                </div>
 
-                <div style="height:50px;margin-bottom:15px;">
-                    <svg width="100%" height="50">
-                        <text x="50%" y="25" font-size="34"
-                              font-weight="700" fill="{{ $textColor }}"
-                              text-anchor="middle">Device Info</text>
+                <svg width="17" height="12" viewBox="0 0 17 12" fill="{{ $headerColor }}">
+                    <path d="M8.5 12L6.5 9.5H10.5L8.5 12Z"/>
+                    <path opacity="{{ ($item['wifiLevel'] ?? 3) >= 2 ? '1' : '0.3' }}" d="M8.5 4.5C6.6 4.5 4.9 5.2 3.6 6.4L5 7.8C5.9 7 7.1 6.5 8.5 6.5C9.9 6.5 11.1 7 12 7.8L13.4 6.4C12.1 5.2 10.4 4.5 8.5 4.5Z"/>
+                    <path opacity="{{ ($item['wifiLevel'] ?? 3) >= 3 ? '1' : '0.3' }}" d="M8.5 0.5C5.3 0.5 2.3 1.8 0.3 4L1.7 5.4C3.4 3.7 5.8 2.5 8.5 2.5C11.2 2.5 13.6 3.7 15.3 5.4L16.7 4C14.7 1.8 11.7 0.5 8.5 0.5Z"/>
+                </svg>
+
+                <div style="position: relative; width: 25px; height: 12px;">
+                    <svg width="25" height="12" viewBox="0 0 25 12">
+                        <rect x="0.5" y="0.5" width="21" height="11" rx="2.5" stroke="{{ $headerColor }}" stroke-width="1" fill="none" opacity="0.35"/>
+                        <path d="M22.5 4C23.3 4 24 4.67 24 5.5V6.5C24 7.33 23.3 8 22.5 8V4Z" fill="{{ $headerColor }}" opacity="0.35"/>
+                        <rect x="2" y="2" width="{{ $item['battWidth'] ?? 19 }}" height="8" rx="1.5" fill="{{ $battFillColor }}"/>
+                        <text x="11" y="6.5" font-family="sans-serif" font-size="6.5" font-weight="700" fill="{{ $battTextColor }}" text-anchor="middle" dominant-baseline="middle">{{ $item['batteryLevel'] }}</text>
                     </svg>
                 </div>
-
-                @php
-                    $fields = [
-                        ['label'=>'EID','val'=>$finalEid,'width'=>'92%'],
-                        ['label'=>'IMEI','val'=>$item['imei1'],'width'=>'70%'],
-                        ['label'=>'IMEI2','val'=>$item['imei2'],'width'=>'70%'],
-                        ['label'=>'MEID','val'=>$item['meid'],'width'=>'60%'],
-                    ];
-                @endphp
-
-                @foreach($fields as $f)
-                <div style="margin-bottom:25px;width:100%;text-align:center;">
-                    <div style="font-size:13px;margin-bottom:8px;">
-                        {{ $f['label'] }} {{ $f['val'] }}
-                    </div>
-                    <div style="background:#fff;padding:12px 6px;
-                                width:{{ $f['width'] }};
-                                margin:auto;border-radius:2px;">
-                        <svg class="barcode-svg"
-                             data-value="{{ $f['val'] }}"
-                             data-format="CODE128"
-                             data-displayValue="false"
-                             style="width:100%;height:40px;"></svg>
-                    </div>
-                </div>
-                @endforeach
             </div>
         </div>
 
-        {{-- HOME BAR (TIDAK IKUT EXPORT) --}}
-        <div style="position:absolute;bottom:8px;left:50%;
-            transform:translateX(-50%);
-            width:134px;height:5px;
-            background:{{ $textColor }};
-            border-radius:100px;z-index:20;"></div>
+        <div style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 94%; height: 92%; background-color: {{ $bgBack }}; border-top-left-radius: 45px; border-top-right-radius: 45px; z-index: 8;"></div>
+
+        <div class="export-area" style="position: absolute; bottom: 0; left: 0; width: 100%; height: 90%; background-color: {{ $bgCard }}; border-top-left-radius: 45px; border-top-right-radius: 45px; z-index: 10; display: flex; flex-direction: column; overflow: hidden;">
+            {{-- ISI ANDA TETAP --}}
+        </div>
+
+        <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; background-color: {{ $textColor }}; border-radius: 100px; z-index: 20; opacity: 1;"></div>
     </div>
 </div>
 
-{{-- ===================== --}}
-{{-- JAVASCRIPT EXPORT PNG --}}
-{{-- ===================== --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <script>
 function downloadCard(id) {
-    const target = document.querySelector(`#${id} .export-area`);
+    const target = document.querySelector('#' + id + ' .export-area');
     if (!target) return;
 
     html2canvas(target, {
@@ -139,8 +85,3 @@ function downloadCard(id) {
     });
 }
 </script>
-
-{{-- BUTTON CONTOH --}}
-<button onclick="downloadCard('{{ $id }}')">
-    Download
-</button>
