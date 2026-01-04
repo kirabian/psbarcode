@@ -3,6 +3,7 @@
     // Menyesuaikan background abu-abu gelap khas iOS pada foto
     $bgMain = $isDark ? '#000000' : '#f6f8f5';
     $bgCard = $isDark ? '#1c1c1e' : '#ffffff';
+    $bgBack = $isDark ? '#141414' : '#d6d6d6';
     $textColor = $isDark ? '#ffffff' : '#000000';
     $headerColor = $isDark ? '#ffffff' : '#000000'; 
     $labelColor = $isDark ? '#ffffff' : '#000000';
@@ -27,12 +28,12 @@
     }
 @endphp
 
-<div id="{{ $id }}" class="iphone-screen" style="width: 375px; height: 812px; background-color: {{ $bgMain }}; color: {{ $textColor }}; font-family: -apple-system, BlinkMacSystemFont, sans-serif; position: relative; overflow: hidden; flex-shrink: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; border-radius: 55px; border: none; box-shadow: inset 0 0 0 0.1px rgba(0,0,0,0.1);">
+<div id="{{ $id }}" class="iphone-screen" style="width: 375px; height: 812px; background-color: {{ $bgMain }}; color: {{ $textColor }}; font-family: -apple-system, BlinkMacSystemFont, sans-serif; position: relative; overflow: hidden; flex-shrink: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; border-radius: 55px;">
     
-    <div style="display: flex; justify-content: space-between; padding: 8px 26px 0 26px; align-items: center; height: 44px; position: absolute; top: 0; left: 0; width: 100%; z-index: 150; box-sizing: border-box;">
+    <div style="display: flex; justify-content: space-between; padding: 14px 26px 0 26px; align-items: center; height: 44px; position: absolute; top: 0; left: 0; width: 100%; z-index: 50; box-sizing: border-box;">
         <div style="font-weight: 600; font-size: 15px; width: 54px; text-align: left; color: {{ $headerColor }};">
             <svg width="60" height="20">
-                <text x="0" y="15" font-family="sans-serif" font-size="15" font-weight="600" fill="{{ $headerColor }}">{{ $item['hour'] }}:{{ $item['minute'] }}</text>
+                <text x="15" y="15" font-family="sans-serif" font-size="15" font-weight="600" fill="{{ $headerColor }}">{{ $item['hour'] }}:{{ $item['minute'] }}</text>
             </svg>
         </div>
 
@@ -52,7 +53,7 @@
             <div style="position: relative; width: 25px; height: 12px;">
                 <svg width="25" height="12" viewBox="0 0 25 12">
                     <rect x="0.5" y="0.5" width="21" height="11" rx="2.5" stroke="{{ $headerColor }}" stroke-width="1" fill="none" opacity="0.35"/>
-                    <path d="M22.5 4C23.3 4 24 4.67 24 5.5V6.5C24 8.33 23.3 9 22.5 9V4Z" fill="{{ $headerColor }}" opacity="0.35"/>
+                    <path d="M22.5 4C23.3 4 24 4.67 24 5.5V6.5C24 7.33 23.3 8 22.5 8V4Z" fill="{{ $headerColor }}" opacity="0.35"/>
                     <rect x="2" y="2" width="{{ $item['battWidth'] ?? 19 }}" height="8" rx="1.5" fill="{{ $battFillColor }}"/>
                     <text x="11" y="6.5" font-family="sans-serif" font-size="6.5" font-weight="700" fill="{{ $battTextColor }}" text-anchor="middle" dominant-baseline="middle">{{ $item['batteryLevel'] }}</text>
                 </svg>
@@ -60,7 +61,9 @@
         </div>
     </div>
 
-    <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 92%; background-color: {{ $bgCard }}; border-top-left-radius: 40px; border-top-right-radius: 40px; z-index: 10; display: flex; flex-direction: column; overflow: hidden;">
+    <div style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 94%; height: 92%; background-color: {{ $bgBack }}; border-top-left-radius: 40px; border-top-right-radius: 40px; z-index: 8;"></div>
+
+    <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 90%; background-color: {{ $bgCard }}; border-top-left-radius: 40px; border-top-right-radius: 40px; z-index: 10; display: flex; flex-direction: column; overflow: hidden;">
         
         <div style="height: 50px; padding: 0 24px; display: flex; align-items: center; flex-shrink: 0; justify-content: flex-start;">
              <span style="color: #0A84FF; font-size: 18px; font-weight: 400;">Cancel</span>
@@ -70,7 +73,7 @@
             
             <div style="width: 100%; height: 50px; flex-shrink: 0; margin-bottom: 15px;">
                 <svg width="100%" height="50">
-                    <text x="50%" y="35" font-family="sans-serif" font-size="34" font-weight="700" fill="{{ $textColor }}" text-anchor="middle">Device Info</text>
+                    <text x="50%" y="25" font-family="sans-serif" font-size="34" font-weight="700" fill="{{ $textColor }}" text-anchor="middle">Device Info</text>
                 </svg>
             </div>
 
