@@ -28,7 +28,7 @@
     }
 @endphp
 
-<div id="{{ $id }}" class="iphone-screen" style="width: 375px; height: 812px; background-color: {{ $bgMain }}; color: {{ $textColor }}; font-family: -apple-system, BlinkMacSystemFont, sans-serif; position: relative; overflow: hidden; flex-shrink: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; border-radius: 55px;">
+<div id="{{ $id }}" class="iphone-screen" style="width: 375px; height: 812px; background-color: {{ $bgCard }}; color: {{ $textColor }}; font-family: -apple-system, BlinkMacSystemFont, sans-serif; position: relative; overflow: hidden; flex-shrink: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; border-radius: 0px;">
     
     <div style="display: flex; justify-content: space-between; padding: 14px 26px 0 26px; align-items: center; height: 44px; position: absolute; top: 0; left: 0; width: 100%; z-index: 50; box-sizing: border-box;">
         <div style="font-weight: 600; font-size: 15px; width: 54px; text-align: left; color: {{ $headerColor }};">
@@ -61,9 +61,9 @@
         </div>
     </div>
 
-    <div style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; height: 92%; background-color: {{ $bgBack }}; border-top-left-radius: 40px; border-top-right-radius: 40px; z-index: 8;"></div>
+    <div style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; height: 100%; background-color: {{ $bgCard }}; border-top-left-radius: 0px; border-top-right-radius: 0px; z-index: 8;"></div>
 
-    <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 90%; background-color: {{ $bgCard }}; border-top-left-radius: 40px; border-top-right-radius: 40px; z-index: 10; display: flex; flex-direction: column; overflow: hidden;">
+    <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; background-color: {{ $bgCard }}; border-top-left-radius: 0px; border-top-right-radius: 0px; z-index: 10; display: flex; flex-direction: column; overflow: hidden;">
         
         <div style="height: 50px; padding: 0 24px; display: flex; align-items: center; flex-shrink: 0; justify-content: flex-start;">
              <span style="color: #0A84FF; font-size: 18px; font-weight: 400;">Cancel</span>
