@@ -4,12 +4,11 @@
     // Warna background internal layar
     $bgMain = $isDark ? '#000000' : '#f6f8f5';
     $bgCard = $isDark ? '#1c1c1e' : '#ffffff';
-    $bgBack = $isDark ? '#141414' : '#d6d6d6';
     $textColor = $isDark ? '#ffffff' : '#000000';
     $headerColor = $isDark ? '#ffffff' : '#000000'; 
     $labelColor = $isDark ? '#ffffff' : '#000000';
 
-    // Pengaturan Frame: Light = Putih (#ffffff), Dark = Hitam (#000000)
+    // Pengaturan Frame Fisik Tipis: Light = Putih Bersih (#ffffff)
     $frameColor = $isDark ? '#000000' : '#ffffff';
     $outerBorder = $isDark ? '#333333' : '#eeeeee';
 
@@ -33,7 +32,7 @@
     }
 @endphp
 
-<div class="iphone-container" style="display: inline-block; background: transparent;">
+<div class="iphone-container" style="display: inline-block; background: transparent; padding: 0; margin: 0;">
     <div class="iphone-physical-frame" style="
         width: 383px; 
         height: 820px; 
@@ -81,19 +80,17 @@
                 </div>
             </div>
 
-            <div style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 94%; height: 92%; background-color: {{ $bgBack }}; border-top-left-radius: 45px; border-top-right-radius: 45px; z-index: 8;"></div>
-
-            <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 90%; background-color: {{ $bgCard }}; border-top-left-radius: 45px; border-top-right-radius: 45px; z-index: 10; display: flex; flex-direction: column; overflow: hidden;">
+            <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 90%; background-color: {{ $bgCard }}; z-index: 10; display: flex; flex-direction: column; overflow: hidden;">
                 
                 <div style="height: 50px; padding: 0 24px; display: flex; align-items: center; flex-shrink: 0; justify-content: flex-start;">
                      <span style="color: #0A84FF; font-size: 18px; font-weight: 400;">Cancel</span>
                 </div>
 
-                <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; overflow: hidden; padding-top: 0px; margin-top: -10px;">
+                <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; overflow: hidden; padding-top: 10px; margin-top: 0;">
                     
-                    <div style="width: 100%; height: 50px; flex-shrink: 0; margin-bottom: 15px;">
+                    <div style="width: 100%; height: 50px; flex-shrink: 0; margin-bottom: 25px;">
                         <svg width="100%" height="50">
-                            <text x="50%" y="25" font-family="sans-serif" font-size="34" font-weight="700" fill="{{ $textColor }}" text-anchor="middle">Device Info</text>
+                            <text x="50%" y="35" font-family="sans-serif" font-size="34" font-weight="700" fill="{{ $textColor }}" text-anchor="middle">Device Info</text>
                         </svg>
                     </div>
 
