@@ -57,13 +57,23 @@
                     </div>
 
                     <div class="flex items-center gap-2">
+                        <div class="flex bg-zinc-100 p-1 rounded-xl gap-1 mr-2">
+                            <button onclick="copyToClipboard('{{ $this->getAllImeisString() }}')" class="px-3 py-1.5 hover:bg-white hover:shadow-sm rounded-lg text-xs font-bold text-zinc-600 transition-all flex items-center gap-1">
+                                <span class="mdi mdi-content-copy"></span> All
+                            </button>
+                            <button onclick="copyToClipboard('{{ $this->getDoubleImeisString() }}')" class="px-3 py-1.5 hover:bg-white hover:shadow-sm rounded-lg text-xs font-bold text-blue-600 transition-all flex items-center gap-1">
+                                <span class="mdi mdi-content-copy"></span> Double
+                            </button>
+                            <button onclick="copyToClipboard('{{ $this->getSingleImeisString() }}')" class="px-3 py-1.5 hover:bg-white hover:shadow-sm rounded-lg text-xs font-bold text-orange-600 transition-all flex items-center gap-1">
+                                <span class="mdi mdi-content-copy"></span> Single
+                            </button>
+                        </div>
                         <button wire:click="checkAllIcloud" wire:loading.attr="disabled"
                             class="px-5 py-2.5 bg-orange-500 text-white rounded-xl font-semibold text-sm hover:bg-orange-600 shadow-sm flex items-center gap-2 transition-all active:scale-95">
                             <span wire:loading wire:target="checkAllIcloud" class="mdi mdi-loading mdi-spin"></span>
                             <span wire:loading.remove wire:target="checkAllIcloud" class="mdi mdi-refresh"></span>
                             Check All
                         </button>
-
                         @if($viewMode == 'card')
                         <select wire:model="selectedCardType" 
                             class="px-4 py-2.5 rounded-xl border border-zinc-200 font-semibold text-sm outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
@@ -71,7 +81,6 @@
                             <option value="iphone14">iPhone 14</option>
                         </select>
                         @endif
-
                         <button wire:click="resetForm" 
                             class="px-4 py-2.5 bg-red-50 text-red-600 rounded-xl font-semibold hover:bg-red-100 transition-all text-sm">
                             Reset
@@ -265,6 +274,16 @@
                 link.href = canvas.toDataURL('image/jpeg', 0.9);
                 link.click();
             });
+        }
+        function copyToClipboard(text) {
+            if (!text) { alert('No data to copy'); return; }
+            const el = document.createElement('textarea');
+            el.value = text;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            alert('Copied to clipboard!');
         }
     </script>
 </div>

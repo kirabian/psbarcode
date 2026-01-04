@@ -137,6 +137,30 @@ class ImeiGenerator extends Component
         $this->dispatchBrowserEvent('modalOpened');
     }
 
+    public function getAllImeisString()
+    {
+        $list = [];
+        foreach($this->readyGroups as $pairs) foreach($pairs as $p) { $list[] = $p['imei1']; $list[] = $p['imei2']; }
+        foreach($this->pairedSingles as $ps) { $list[] = $ps[0]; $list[] = $ps[1]; }
+        if($this->leftoverSingle) $list[] = $this->leftoverSingle;
+        return implode('\n', $list);
+    }
+
+    public function getDoubleImeisString()
+    {
+        $list = [];
+        foreach($this->readyGroups as $pairs) foreach($pairs as $p) { $list[] = $p['imei1']; $list[] = $p['imei2']; }
+        return implode('\n', $list);
+    }
+
+    public function getSingleImeisString()
+    {
+        $list = [];
+        foreach($this->pairedSingles as $ps) { $list[] = $ps[0]; $list[] = $ps[1]; }
+        if($this->leftoverSingle) $list[] = $this->leftoverSingle;
+        return implode('\n', $list);
+    }
+
     public function closeModal() { $this->showModal = false; $this->selectedItem = null; }
     public function resetForm() { $this->reset(); }
     public function render() { return view('livewire.imei-generator'); }
