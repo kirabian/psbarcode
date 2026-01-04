@@ -29,37 +29,22 @@ class ImeiGenerator extends Component
         $allImeis = array_unique($matches[0]);
         if (empty($allImeis)) return;
 
-        $this->readyGroups = [];
-        $this->randomItems = [];
-        $this->pairedSingles = [];
-        $this->leftoverSingle = null;
+        $this->readyGroups = []; $this->randomItems = [];
+        $this->pairedSingles = []; $this->leftoverSingle = null;
         
         $grouped = collect($allImeis)->groupBy(fn ($imei) => substr($imei, 0, 8));
-
         foreach ($grouped as $tac => $imeis) {
             $chunked = $imeis->chunk(2);
             foreach ($chunked as $chunk) {
                 if ($chunk->count() === 2) {
-                    $this->readyGroups[$tac][] = [
-                        'imei1' => $chunk->first(), 
-                        'imei2' => $chunk->last()
-                    ];
-                } else {
-                    $this->randomItems[] = $chunk->first();
-                }
+                    $this->readyGroups[$tac][] = ['imei1' => $chunk->first(), 'imei2' => $chunk->last()];
+                } else { $this->randomItems[] = $chunk->first(); }
             }
         }
-
         if (!empty($this->randomItems)) {
-            $singleCollection = collect($this->randomItems)->values();
-            if ($singleCollection->count() % 2 !== 0) {
-                $this->leftoverSingle = $singleCollection->pop();
-            }
-            if ($singleCollection->isNotEmpty()) {
-                $this->pairedSingles = $singleCollection->chunk(2)
-                    ->map(fn ($c) => $c->values()->toArray())
-                    ->toArray();
-            }
+            $sc = collect($this->randomItems)->values();
+            if ($sc->count() % 2 !== 0) { $this->leftoverSingle = $sc->pop(); }
+            if ($sc->isNotEmpty()) { $this->pairedSingles = $sc->chunk(2)->map(fn ($c) => $c->values()->toArray())->toArray(); }
         }
         $this->viewMode = 'select';
     }
@@ -68,100 +53,76 @@ class ImeiGenerator extends Component
 
     public function checkIcloud($imei)
     {
-        if (!$imei) return;
-        if (isset($this->icloudStatus[$imei]) && in_array($this->icloudStatus[$imei]['status'], ['ON', 'OFF'])) return;
-        
-        $this->icloudStatus[$imei] = ['status' => 'Mengecek...', 'color' => 'orange', 'icon' => 'mdi-loading mdi-spin'];
-
+        if (!$imei || (isset($this->icloudStatus[$imei]) && in_array($this->icloudStatus[$imei]['status'], ['ON', 'OFF']))) return;
+        $this->icloudStatus[$imei] = ['status' => 'Check...', 'color' => 'orange'];
         try {
-            $response = Http::asForm()->timeout(20)->post($this->apiUrl, [
-                'service' => $this->serviceId, 
-                'imei' => $imei, 
-                'key' => $this->apiKey,
-            ]);
-
+            $response = Http::asForm()->timeout(20)->post($this->apiUrl, ['service' => $this->serviceId, 'imei' => $imei, 'key' => $this->apiKey]);
             if ($response->successful()) {
                 $res = $response->json();
-                $isON = false;
-                if (isset($res['object']['fmiOn'])) { 
-                    $isON = (bool)$res['object']['fmiOn']; 
-                } else {
-                    $raw = strtoupper($res['response'] ?? '');
-                    $isON = str_contains($raw, 'ON') && !str_contains($raw, 'OFF');
-                }
-                
-                $this->icloudStatus[$imei] = [
-                    'status' => $isON ? 'ON' : 'OFF',
-                    'color' => $isON ? 'green' : 'red',
-                    'icon' => $isON ? 'mdi-lock' : 'mdi-lock-open',
-                ];
+                $isON = isset($res['object']['fmiOn']) ? (bool)$res['object']['fmiOn'] : (str_contains(strtoupper($res['response'] ?? ''), 'ON') && !str_contains(strtoupper($res['response'] ?? ''), 'OFF'));
+                $this->icloudStatus[$imei] = ['status' => $isON ? 'ON' : 'OFF'];
             }
-        } catch (\Exception $e) { 
-            $this->icloudStatus[$imei] = ['status' => 'ERROR', 'color' => 'gray', 'icon' => 'mdi-alert']; 
-        }
+        } catch (\Exception $e) { $this->icloudStatus[$imei] = ['status' => 'ERR']; }
     }
 
     public function checkAllIcloud()
     {
-        foreach ($this->readyGroups as $tac => $pairs) {
-            foreach ($pairs as $item) { 
-                $this->checkIcloud($item['imei1']); 
-                $this->checkIcloud($item['imei2']); 
-            }
-        }
-        foreach ($this->pairedSingles as $pair) { 
-            $this->checkIcloud($pair[0]); 
-            $this->checkIcloud($pair[1]); 
-        }
-        if ($this->leftoverSingle) { 
-            $this->checkIcloud($this->leftoverSingle); 
-        }
+        foreach ($this->readyGroups as $pairs) foreach ($pairs as $item) { $this->checkIcloud($item['imei1']); $this->checkIcloud($item['imei2']); }
+        foreach ($this->pairedSingles as $pair) { $this->checkIcloud($pair[0]); $this->checkIcloud($pair[1]); }
+        if ($this->leftoverSingle) $this->checkIcloud($this->leftoverSingle);
     }
 
     public function openCard($imei1, $imei2 = null)
     {
         $this->lastTheme = ($this->lastTheme == 'light') ? 'dark' : 'light';
-        $this->selectedItem = [
-            'imei1' => $imei1,
-            'imei2' => $imei2 ?: $imei1,
-            'eid' => '8904' . mt_rand(10000000, 99999999) . mt_rand(10000000, 99999999),
-            'meid' => substr($imei1, 0, 14),
-            'hour' => now()->format('H'),
-            'minute' => now()->format('i'),
-            'batteryLevel' => rand(45, 95),
-            'theme' => $this->lastTheme,
-            'deviceModel' => $this->selectedCardType,
-            'useWifi' => (bool)rand(0, 1)
-        ];
+        $this->selectedItem = $this->createItemData($imei1, $imei2);
         $this->showModal = true;
         $this->dispatchBrowserEvent('modalOpened');
     }
 
-    public function getAllImeisString()
-    {
-        $list = [];
-        foreach($this->readyGroups as $pairs) foreach($pairs as $p) { $list[] = $p['imei1']; $list[] = $p['imei2']; }
-        foreach($this->pairedSingles as $ps) { $list[] = $ps[0]; $list[] = $ps[1]; }
-        if($this->leftoverSingle) $list[] = $this->leftoverSingle;
-        return implode('\n', $list);
+    private function createItemData($imei1, $imei2 = null) {
+        return [
+            'imei1' => $imei1, 'imei2' => $imei2 ?: $imei1, 'meid' => substr($imei1, 0, 14),
+            'eid' => '8904' . mt_rand(10000000, 99999999) . mt_rand(10000000, 99999999),
+            'hour' => now()->format('H'), 'minute' => now()->format('i'),
+            'batteryLevel' => rand(45, 95), 'theme' => $this->lastTheme,
+            'deviceModel' => $this->selectedCardType
+        ];
     }
 
-    public function getDoubleImeisString()
-    {
-        $list = [];
-        foreach($this->readyGroups as $pairs) foreach($pairs as $p) { $list[] = $p['imei1']; $list[] = $p['imei2']; }
-        return implode('\n', $list);
+    public function getImeiDataForZip() {
+        $data = [];
+        $view = ($this->selectedCardType == 'iphone14') ? 'livewire.partials.iphone-14-card' : 'livewire.partials.iphone-card';
+        
+        foreach($this->readyGroups as $pairs) {
+            foreach($pairs as $p) {
+                $item = $this->createItemData($p['imei1'], $p['imei2']);
+                $data[] = ['imei1' => $p['imei1'], 'html' => view($view, ['item' => $item, 'id' => 'zip-'.$p['imei1']])->render()];
+            }
+        }
+        return $data;
     }
 
-    public function getSingleImeisString()
-    {
-        $list = [];
-        foreach($this->pairedSingles as $ps) { $list[] = $ps[0]; $list[] = $ps[1]; }
-        if($this->leftoverSingle) $list[] = $this->leftoverSingle;
-        return implode('\n', $list);
+    public function getAllImeisString() {
+        $l = [];
+        foreach($this->readyGroups as $pairs) foreach($pairs as $p) { $l[] = $p['imei1']; $l[] = $p['imei2']; }
+        foreach($this->pairedSingles as $ps) { $l[] = $ps[0]; $l[] = $ps[1]; }
+        if($this->leftoverSingle) $l[] = $this->leftoverSingle;
+        return implode('\n', $l);
     }
 
-    public function closeModal() { $this->showModal = false; $this->selectedItem = null; }
+    public function getDoubleImeisString() {
+        $l = []; foreach($this->readyGroups as $pairs) foreach($pairs as $p) { $l[] = $p['imei1']; $l[] = $p['imei2']; }
+        return implode('\n', $l);
+    }
+
+    public function getSingleImeisString() {
+        $l = []; foreach($this->pairedSingles as $ps) { $l[] = $ps[0]; $l[] = $ps[1]; }
+        if($this->leftoverSingle) $l[] = $this->leftoverSingle;
+        return implode('\n', $l);
+    }
+
+    public function closeModal() { $this->showModal = false; }
     public function resetForm() { $this->reset(); }
     public function render() { return view('livewire.imei-generator'); }
 }
