@@ -205,17 +205,13 @@
                 const tempArea = document.getElementById('zip-temp-area');
                 for (const item of data) {
                     tempArea.innerHTML = item.html;
-                    // Inisialisasi barcode di elemen temp
                     JsBarcode(tempArea.querySelector(".barcode-svg")).init();
-                    
                     const canvas = await html2canvas(tempArea.firstChild, { scale: 2, useCORS: true, backgroundColor: '#000' });
                     const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.8));
                     zip.file(`IMEI_${item.imei1}.jpg`, blob);
                 }
-                
                 const content = await zip.generateAsync({type: "blob"});
                 saveAs(content, `Barcodes_${Date.now()}.zip`);
-                
                 btn.innerHTML = originalText;
                 btn.disabled = false;
                 tempArea.innerHTML = '';
@@ -235,7 +231,7 @@
         function copyToClipboard(text) {
             if (!text) return;
             const cleanText = text.replace(/\\n/g, '\n');
-            navigator.clipboard.writeText(cleanText).then(() => alert('Copied to clipboard!'));
+            navigator.clipboard.writeText(cleanText).then(() => alert('Copied!'));
         }
     </script>
 </div>
