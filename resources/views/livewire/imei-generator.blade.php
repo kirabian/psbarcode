@@ -66,9 +66,14 @@
                             <span wire:loading.remove wire:target="checkAllIcloud" class="mdi mdi-refresh"></span> Check All
                         </button>
                         @if($viewMode == 'card')
-                        <button id="downloadBtn" onclick="downloadAllAsZip()" class="flex-1 sm:flex-none px-4 py-2.5 bg-emerald-600 text-white rounded-xl font-semibold text-xs hover:bg-emerald-700 flex items-center justify-center gap-2 transition-all shadow-sm">
-                            <span class="mdi mdi-zip-box"></span> Download ZIP
-                        </button>
+                        <div class="flex gap-2 w-full sm:w-auto">
+                            <button onclick="downloadZip('double')" class="btn-zip flex-1 sm:flex-none px-4 py-2.5 bg-blue-600 text-white rounded-xl font-semibold text-xs hover:bg-blue-700 flex items-center justify-center gap-2 transition-all shadow-sm">
+                                <span class="mdi mdi-zip-box"></span> ZIP Double
+                            </button>
+                            <button onclick="downloadZip('single')" class="btn-zip flex-1 sm:flex-none px-4 py-2.5 bg-orange-600 text-white rounded-xl font-semibold text-xs hover:bg-orange-700 flex items-center justify-center gap-2 transition-all shadow-sm">
+                                <span class="mdi mdi-zip-box"></span> ZIP Single
+                            </button>
+                        </div>
                         <select wire:model="selectedCardType" class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl border border-zinc-200 font-semibold text-xs bg-white outline-none focus:ring-2 focus:ring-emerald-500">
                             <option value="iphone">iPhone Std</option>
                             <option value="iphone14">iPhone 14</option>
@@ -81,8 +86,10 @@
                 <div class="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4">
                     @php 
                         $countDouble = collect($readyGroups)->flatten(1)->count() * 2;
-                        $countSingle = (count($pairedSingles) * 2) + ($leftoverSingle ? 1 : 0);
-                        $totalImeis = $countDouble + $countSingle;
+                        $countPairedSingle = count($pairedSingles) * 2;
+                        $countOdd = $leftoverSingle ? 1 : 0;
+                        $totalSingle = $countPairedSingle + $countOdd;
+                        $totalImeis = $countDouble + $totalSingle;
                     @endphp
                     <div class="bg-white p-4 md:p-5 rounded-2xl shadow-sm border border-zinc-200">
                         <p class="text-[10px] text-zinc-500 font-bold uppercase mb-1">Total IMEIs</p>
@@ -94,7 +101,7 @@
                     </div>
                     <div class="bg-white p-4 md:p-5 rounded-2xl shadow-sm border border-zinc-200">
                         <p class="text-[10px] text-orange-600 font-bold uppercase mb-1">Total Single</p>
-                        <p class="text-2xl md:text-3xl font-black text-orange-600">{{ $countSingle }}</p>
+                        <p class="text-2xl md:text-3xl font-black text-orange-600">{{ $totalSingle }}</p>
                     </div>
                     <div class="bg-white p-4 md:p-5 rounded-2xl shadow-sm border border-zinc-200">
                         <p class="text-[10px] text-emerald-600 font-bold uppercase mb-1">iCloud ON</p>
@@ -193,63 +200,81 @@
             setTimeout(() => { if(window.JsBarcode) JsBarcode(".barcode-svg").init(); }, 300);
         });
 
-        async function downloadAllAsZip() {
+        async function downloadZip(type) {
             const zip = new JSZip();
-            const btn = document.getElementById('downloadBtn');
-            const originalText = btn.innerHTML;
+            const btns = document.querySelectorAll('.btn-zip');
+            const tempArea = document.getElementById('zip-temp-area');
             
-            // Pencegahan klik berkali-kali
-            btn.innerHTML = '<span class="mdi mdi-loading mdi-spin"></span> Processing ZIP...';
-            btn.disabled = true;
-            btn.classList.add('opacity-50', 'cursor-not-allowed');
+            // Lock semua tombol zip
+            btns.forEach(b => {
+                b.disabled = true;
+                b.classList.add('opacity-50', 'cursor-not-allowed');
+            });
+            
+            const activeBtn = Array.from(btns).find(b => b.innerText.toLowerCase().includes(type));
+            const originalText = activeBtn.innerHTML;
 
             try {
-                const data = await @this.getImeiDataForZip();
-                const tempArea = document.getElementById('zip-temp-area');
-                
+                // Ambil data sesuai type
+                const data = (type === 'double') 
+                    ? await @this.getDoubleDataForZip() 
+                    : await @this.getSingleDataForZip();
+
+                if (data.length === 0) {
+                    alert('Tidak ada data untuk kategori ini.');
+                    return;
+                }
+
                 for (let i = 0; i < data.length; i++) {
                     const item = data[i];
-                    // Update teks progress
-                    btn.innerHTML = `<span class="mdi mdi-loading mdi-spin"></span> Generating ${i + 1}/${data.length}`;
+                    activeBtn.innerHTML = `<span class="mdi mdi-loading mdi-spin"></span> Render ${i+1}/${data.length}`;
                     
                     tempArea.innerHTML = item.html;
                     
+                    // Inisialisasi barcode
                     const barcodeElements = tempArea.querySelectorAll(".barcode-svg");
                     barcodeElements.forEach(el => {
                         const val = el.getAttribute('data-value');
                         if (val && val !== '') JsBarcode(el).init();
                     });
                     
-                    await new Promise(r => setTimeout(r, 200));
+                    // Tunggu DOM & Barcode siap
+                    await new Promise(r => setTimeout(r, 250));
                     
                     const canvas = await html2canvas(tempArea.firstChild, { 
                         scale: 2, 
                         useCORS: true, 
-                        backgroundColor: null 
+                        backgroundColor: null,
+                        logging: false
                     });
                     
                     const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
                     zip.file(`IMEI_${item.imei1}.png`, blob);
+                    
+                    // Bersihkan memori DOM
                     tempArea.innerHTML = '';
                 }
                 
-                btn.innerHTML = '<span class="mdi mdi-loading mdi-spin"></span> Compressing...';
+                activeBtn.innerHTML = `<span class="mdi mdi-loading mdi-spin"></span> Packing...`;
                 const content = await zip.generateAsync({type: "blob"});
-                saveAs(content, `Barcodes_Alternated_${Date.now()}.zip`);
+                saveAs(content, `Barcodes_${type.toUpperCase()}_${Date.now()}.zip`);
                 
             } catch (error) {
-                console.error(error);
-                alert('Gagal mendownload ZIP');
+                console.error('ZIP Error:', error);
+                alert('Terjadi kesalahan saat memproses gambar.');
             } finally {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                // Restore UI
+                activeBtn.innerHTML = originalText;
+                btns.forEach(b => {
+                    b.disabled = false;
+                    b.classList.remove('opacity-50', 'cursor-not-allowed');
+                });
             }
         }
 
         function downloadCardPng() {
             const area = document.getElementById('capture-area').firstElementChild;
-            html2canvas(area, { scale: 3, useCORS: true, backgroundColor: null, logging: false, allowTaint: true }).then(canvas => {
+            html2canvas(area, { scale: 3, useCORS: true, backgroundColor: null, logging: false }).then(canvas => {
                 const link = document.createElement('a');
                 link.download = `DeviceInfo-${Date.now()}.png`;
                 link.href = canvas.toDataURL('image/png');

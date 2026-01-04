@@ -90,26 +90,34 @@ class ImeiGenerator extends Component
         ];
     }
 
-    public function getImeiDataForZip() {
+    // Ambil data khusus untuk ZIP Double
+    public function getDoubleDataForZip() {
         $data = [];
         $view = ($this->selectedCardType == 'iphone14') ? 'livewire.partials.iphone-14-card' : 'livewire.partials.iphone-card';
         $currentTheme = 'light';
-        
         foreach($this->readyGroups as $tac => $pairs) {
             foreach($pairs as $p) {
                 $item = $this->createItemData($p['imei1'], $p['imei2'], $currentTheme);
-                $data[] = ['imei1' => $p['imei1'], 'html' => view($view, ['item' => $item, 'id' => 'z-'.$p['imei1']])->render()];
+                $data[] = ['imei1' => $p['imei1'], 'html' => view($view, ['item' => $item, 'id' => 'zd-'.$p['imei1']])->render()];
                 $currentTheme = ($currentTheme == 'light') ? 'dark' : 'light';
             }
         }
+        return $data;
+    }
+
+    // Ambil data khusus untuk ZIP Single
+    public function getSingleDataForZip() {
+        $data = [];
+        $view = ($this->selectedCardType == 'iphone14') ? 'livewire.partials.iphone-14-card' : 'livewire.partials.iphone-card';
+        $currentTheme = 'light';
         foreach($this->pairedSingles as $ps) {
             $item = $this->createItemData($ps[0], $ps[1], $currentTheme);
-            $data[] = ['imei1' => $ps[0], 'html' => view($view, ['item' => $item, 'id' => 'z-'.$ps[0]])->render()];
+            $data[] = ['imei1' => $ps[0], 'html' => view($view, ['item' => $item, 'id' => 'zs-'.$ps[0]])->render()];
             $currentTheme = ($currentTheme == 'light') ? 'dark' : 'light';
         }
         if($this->leftoverSingle) {
             $item = $this->createItemData($this->leftoverSingle, null, $currentTheme);
-            $data[] = ['imei1' => $this->leftoverSingle, 'html' => view($view, ['item' => $item, 'id' => 'z-'.$this->leftoverSingle])->render()];
+            $data[] = ['imei1' => $this->leftoverSingle, 'html' => view($view, ['item' => $item, 'id' => 'zs-'.$this->leftoverSingle])->render()];
         }
         return $data;
     }
