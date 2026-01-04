@@ -61,9 +61,9 @@
         </div>
     </div>
 
-    <div style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 94%; height: 92%; background-color: {{ $bgBack }}; border-top-left-radius: 45px; border-top-right-radius: 45px; z-index: 8;"></div>
+    <div style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 94%; height: 92%; background-color: {{ $bgBack }}; border-top-left-radius: 0px; border-top-right-radius: 0px; z-index: 8;"></div>
 
-    <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 90%; background-color: {{ $bgCard }}; border-top-left-radius: 45px; border-top-right-radius: 45px; z-index: 10; display: flex; flex-direction: column; overflow: hidden;">
+    <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 90%; background-color: {{ $bgCard }}; border-top-left-radius: 0px; border-top-right-radius: 0px; z-index: 10; display: flex; flex-direction: column; overflow: hidden;">
         
         <div style="height: 50px; padding: 0 24px; display: flex; align-items: center; flex-shrink: 0; justify-content: flex-start;">
              <span style="color: #0A84FF; font-size: 18px; font-weight: 400;">Cancel</span>
