@@ -1,6 +1,6 @@
 @php
     $isDark = ($item['theme'] ?? 'light') == 'dark';
-    // Bezel hitam dibuat sebagai background dasar yang sangat tipis
+    // Bezel utama hitam dibuat sangat tipis di pinggir
     $bgMain = '#000000'; 
     $bgCard = $isDark ? '#1c1c1e' : '#ffffff';
     $bgBack = $isDark ? '#141414' : '#d6d6d6';
@@ -28,17 +28,17 @@
     }
 @endphp
 
-<div id="{{ $id }}" class="iphone-screen" style="width: 375px; height: 812px; background-color: {{ $bgMain }}; color: {{ $textColor }}; font-family: -apple-system, BlinkMacSystemFont, sans-serif; position: relative; overflow: hidden; flex-shrink: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; border-radius: 50px;">
+<div id="{{ $id }}" class="iphone-screen" style="width: 375px; height: 812px; background-color: {{ $bgMain }}; color: {{ $textColor }}; font-family: -apple-system, BlinkMacSystemFont, sans-serif; position: relative; overflow: hidden; flex-shrink: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; border-radius: 55px;">
     
-    <div style="display: flex; justify-content: space-between; padding: 16px 24px 0 24px; align-items: center; height: 44px; position: absolute; top: 0; left: 0; width: 100%; z-index: 50; box-sizing: border-box;">
+    <div style="display: flex; justify-content: space-between; padding: 14px 26px 0 26px; align-items: center; height: 44px; position: absolute; top: 0; left: 0; width: 100%; z-index: 50; box-sizing: border-box;">
         <div style="font-weight: 600; font-size: 15px; width: 54px; text-align: left; color: {{ $headerColor }};">
             <svg width="60" height="20">
-                <text x="10" y="15" font-family="sans-serif" font-size="15" font-weight="600" fill="{{ $headerColor }}">{{ $item['hour'] }}:{{ $item['minute'] }}</text>
+                <text x="15" y="15" font-family="sans-serif" font-size="15" font-weight="600" fill="{{ $headerColor }}">{{ $item['hour'] }}:{{ $item['minute'] }}</text>
             </svg>
         </div>
 
-        <div style="display: flex; gap: 6px; align-items: center;">
-            <div style="display: flex; gap: 2px; align-items: center;">
+        <div style="display: flex; gap: 7px; align-items: center;">
+            <div style="display: flex; gap: 2.5px; align-items: center;">
                 @for($i=1; $i<=4; $i++)
                     <div style="width: 3px; height: 3px; background-color: {{ $headerColor }}; border-radius: 50%; opacity: {{ ($item['signalStrength'] ?? 4) >= $i ? '1' : '0.2' }};"></div>
                 @endfor
@@ -61,17 +61,13 @@
         </div>
     </div>
 
-    <div style="position: absolute; top: 2px; left: 2px; right: 2px; bottom: 2px; background-color: {{ $bgBack }}; border-radius: 48px; z-index: 8;"></div>
+    <div style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 99.5%; height: 92%; background-color: {{ $bgBack }}; border-top-left-radius: 40px; border-top-right-radius: 40px; z-index: 8;"></div>
 
-    <div style="position: absolute; top: 0; left: 1px; right: 1px; bottom: 0; background-color: {{ $bgCard }}; border-top-left-radius: 40px; border-top-right-radius: 40px; border-bottom-left-radius: 48px; border-bottom-right-radius: 48px; z-index: 10; display: flex; flex-direction: column; overflow: hidden;">
+    <div style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 99%; height: 90%; background-color: {{ $bgCard }}; border-top-left-radius: 40px; border-top-right-radius: 40px; z-index: 10; display: flex; flex-direction: column; overflow: hidden;">
         
-        <div style="height: 54px; padding: 20px 24px 0 24px; display: flex; align-items: center; flex-shrink: 0; justify-content: flex-start;">
-             <span style="color: #0A84FF; font-size: 18px; font-weight: 400;">Cancel</span>
-        </div>
-
-        <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; overflow: hidden; padding-top: 10px;">
+        <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; overflow: hidden; padding-top: 25px;">
             
-            <div style="width: 100%; height: 50px; flex-shrink: 0; margin-bottom: 20px;">
+            <div style="width: 100%; height: 50px; flex-shrink: 0; margin-bottom: 25px;">
                 <svg width="100%" height="50">
                     <text x="50%" y="30" font-family="sans-serif" font-size="34" font-weight="700" fill="{{ $textColor }}" text-anchor="middle">Device Info</text>
                 </svg>
@@ -79,17 +75,17 @@
 
             @php
                 $fields = [
-                    ['label' => 'EID', 'key' => 'eid', 'val' => $finalEid, 'width' => '92%', 'barHeight' => 20],
-                    ['label' => 'IMEI', 'key' => 'imei1', 'val' => $item['imei1'], 'width' => '72%', 'barHeight' => 20],
-                    ['label' => 'IMEI2', 'key' => 'imei2', 'val' => $item['imei2'], 'width' => '72%', 'barHeight' => 20],
-                    ['label' => 'MEID', 'key' => 'meid', 'val' => $item['meid'], 'width' => '62%', 'barHeight' => 20],
+                    ['label' => 'EID', 'key' => 'eid', 'val' => $finalEid, 'width' => '92%', 'barHeight' => 22],
+                    ['label' => 'IMEI', 'key' => 'imei1', 'val' => $item['imei1'], 'width' => '72%', 'barHeight' => 22],
+                    ['label' => 'IMEI2', 'key' => 'imei2', 'val' => $item['imei2'], 'width' => '72%', 'barHeight' => 22],
+                    ['label' => 'MEID', 'key' => 'meid', 'val' => $item['meid'], 'width' => '62%', 'barHeight' => 22],
                 ];
             @endphp
 
             @foreach($fields as $field)
             <div style="margin-bottom: 30px; width: 100%; display: flex; flex-direction: column; align-items: center; flex-shrink: 0;">
                 
-                <div style="width: 100%; height: 20px; margin-bottom: 10px;">
+                <div style="width: 100%; height: 20px; margin-bottom: 8px;">
                     <svg width="100%" height="20">
                         <text x="50%" y="15" font-family="sans-serif" font-size="13" font-weight="500" fill="{{ $labelColor }}" text-anchor="middle">
                             {{ $field['label'] }} {{ $field['val'] }}
@@ -110,6 +106,10 @@
                 </div>
             </div>
             @endforeach
+
+            <div style="margin-top: auto; margin-bottom: 30px; width: 100%; display: flex; justify-content: center;">
+                 <span style="color: #0A84FF; font-size: 20px; font-weight: 400; cursor: pointer;">Cancel</span>
+            </div>
         </div>
     </div>
     
