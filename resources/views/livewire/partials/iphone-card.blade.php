@@ -1,6 +1,7 @@
 @php
     $isDark = ($item['theme'] ?? 'light') == 'dark';
-    $bgMain = $isDark ? '#000000' : '#f6f8f5';
+    // Mengatur background agar menyatu tanpa bezel hitam tambahan
+    $bgMain = $isDark ? '#1c1c1e' : '#ffffff';
     $bgCard = $isDark ? '#1c1c1e' : '#ffffff';
     $bgBack = $isDark ? '#141414' : '#d6d6d6';
     $textColor = $isDark ? '#ffffff' : '#000000';
@@ -21,9 +22,9 @@
     }
 @endphp
 
-<div id="{{ $id }}" class="iphone-screen" style="width: 375px; height: 812px; color: {{ $textColor }}; font-family: -apple-system, BlinkMacSystemFont, sans-serif; position: relative; overflow: hidden; flex-shrink: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; padding: 2px;">
+<div id="{{ $id }}" class="iphone-screen" style="width: 375px; height: 812px; color: {{ $textColor }}; font-family: -apple-system, BlinkMacSystemFont, sans-serif; position: relative; overflow: hidden; flex-shrink: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; background-color: {{ $bgCard }}; border-radius: 50px;">
     
-    <div style="width: 100%; height: 100%; background-color: {{ $bgMain }}; border-radius: 40px; position: relative; overflow: hidden;">
+    <div style="width: 100%; height: 100%; position: relative; overflow: hidden;">
         
         <div style="display: flex; justify-content: space-between; padding: 14px 26px 0 26px; align-items: center; height: 44px; position: absolute; top: 0; left: 0; width: 100%; z-index: 50; box-sizing: border-box;">
             <div style="font-weight: 600; font-size: 15px; width: 54px; text-align: left; color: {{ $headerColor }};">
@@ -56,7 +57,7 @@
             </div>
         </div>
 
-        <div style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 94%; height: 92%; background-color: {{ $bgBack }}; border-top-left-radius: 45px; border-top-right-radius: 45px; z-index: 8;"></div>
+        <div style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; height: 92%; background-color: {{ $bgBack }}; border-top-left-radius: 45px; border-top-right-radius: 45px; z-index: 8;"></div>
 
         <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 90%; background-color: {{ $bgCard }}; border-top-left-radius: 45px; border-top-right-radius: 45px; z-index: 10; display: flex; flex-direction: column; overflow: hidden;">
             
