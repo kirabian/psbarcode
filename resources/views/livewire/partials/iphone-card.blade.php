@@ -1,6 +1,5 @@
 @php
     $isDark = ($item['theme'] ?? 'light') == 'dark';
-    // Menyesuaikan background abu-abu gelap khas iOS pada foto
     $bgMain = $isDark ? '#000000' : '#f6f8f5';
     $bgCard = $isDark ? '#1c1c1e' : '#ffffff';
     $bgBack = $isDark ? '#141414' : '#d6d6d6';
@@ -8,15 +7,10 @@
     $headerColor = $isDark ? '#ffffff' : '#000000'; 
     $labelColor = $isDark ? '#ffffff' : '#000000';
 
-    if (($item['batteryLevel'] ?? 100) < 20) {
-        $battFillColor = '#FF3B30'; 
-    } else {
-        $battFillColor = '#34C759'; 
-    }
+    $battFillColor = ($item['batteryLevel'] ?? 100) < 20 ? '#FF3B30' : '#34C759';
     
     $battTextColor = $item['battTextRandom'] ?? ($isDark ? '#ffffff' : '#000000'); 
     
-    // Logika pengunci 33 digit EID
     $rawEid = (string)($item['eid'] ?? '');
     if (strlen($rawEid) < 33) {
         $needed = 33 - strlen('8904');
@@ -60,8 +54,6 @@
             </div>
         </div>
     </div>
-
-    <div style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 94%; height: 92%; background-color: {{ $bgBack }}; border-top-left-radius: 45px; border-top-right-radius: 45px; z-index: 8;"></div>
 
     <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 90%; background-color: {{ $bgCard }}; border-top-left-radius: 45px; border-top-right-radius: 45px; z-index: 10; display: flex; flex-direction: column; overflow: hidden;">
         
