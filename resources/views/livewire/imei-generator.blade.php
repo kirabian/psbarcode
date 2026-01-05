@@ -207,10 +207,11 @@
             const originalText = btn.innerHTML;
             const tempArea = document.getElementById('zip-temp-area');
 
-            // LOCK BUTTONS
+            // LOCK BOTH BUTTONS
             btn.disabled = true;
             if(otherBtn) otherBtn.disabled = true;
             btn.classList.add('opacity-75', 'cursor-wait');
+            if(otherBtn) otherBtn.classList.add('opacity-50', 'cursor-not-allowed');
 
             try {
                 const data = (type === 'double') 
@@ -225,7 +226,6 @@
 
                 for (let i = 0; i < data.length; i++) {
                     const item = data[i];
-                    // UPDATE PROGRESS ON BUTTON
                     btn.innerHTML = `<span class="mdi mdi-loading mdi-spin"></span> Process ${i+1}/${data.length}`;
                     
                     tempArea.innerHTML = item.html;
@@ -236,7 +236,6 @@
                         if (val && val !== '') JsBarcode(el).init();
                     });
                     
-                    // Delay for DOM safety
                     await new Promise(r => setTimeout(r, 300));
                     
                     const canvas = await html2canvas(tempArea.firstChild, { 
@@ -253,7 +252,10 @@
                 
                 btn.innerHTML = `<span class="mdi mdi-loading mdi-spin"></span> Compressing...`;
                 const content = await zip.generateAsync({type: "blob"});
-                saveAs(content, `IMEI_${type.toUpperCase()}_${Date.now()}.zip`);
+                
+                // NAMING LOGIC: "30 IMEI DOUBLE.zip" or "15 IMEI SINGLE.zip"
+                const zipFileName = `${data.length} IMEI ${type.toUpperCase()}.zip`;
+                saveAs(content, zipFileName);
                 
             } catch (error) {
                 console.error(error);
@@ -265,7 +267,10 @@
             function restoreButtons() {
                 btn.innerHTML = originalText;
                 btn.disabled = false;
-                if(otherBtn) otherBtn.disabled = false;
+                if(otherBtn) {
+                    otherBtn.disabled = false;
+                    otherBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                }
                 btn.classList.remove('opacity-75', 'cursor-wait');
             }
         }

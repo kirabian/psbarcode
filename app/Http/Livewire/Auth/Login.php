@@ -22,7 +22,7 @@ class Login extends Component
 
         // Data 3 Akun yang diminta (Bisa dipindah ke Database nanti)
         $users = [
-            ['id' => 'admin_pstore', 'pass' => 'pstore123'],
+            ['id' => 'pstore123', 'pass' => 'jakarta123'],
             ['id' => 'staff_pstore', 'pass' => 'staff789'],
             ['id' => 'owner_pstore', 'pass' => 'pstorewin'],
         ];

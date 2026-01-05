@@ -81,7 +81,6 @@ class ImeiGenerator extends Component
     }
 
     private function createItemData($imei1, $imei2 = null, $theme = 'light') {
-        // Perbaikan: Jam & Menit diacak menggunakan mt_rand
         return [
             'imei1' => $imei1, 'imei2' => $imei2 ?: $imei1, 'meid' => substr($imei1, 0, 14),
             'eid' => '8904' . mt_rand(10000000, 99999999) . mt_rand(10000000, 99999999),
