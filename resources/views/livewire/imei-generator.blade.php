@@ -54,7 +54,6 @@
                         </button>
                         <h2 class="text-lg md:text-xl font-bold text-zinc-900 line-clamp-1 uppercase tracking-tight">{{ $viewMode }} Panel</h2>
                     </div>
-
                     <div class="flex flex-wrap items-center gap-2 w-full lg:w-auto">
                         <div class="flex bg-zinc-100 p-1 rounded-xl gap-1 w-full sm:w-auto overflow-x-auto">
                             <button onclick="copyToClipboard(`{{ $this->getAllImeisString() }}`)" class="flex-1 sm:flex-none px-3 py-1.5 hover:bg-white rounded-lg text-xs font-bold text-zinc-600 transition-all">All</button>
@@ -82,7 +81,6 @@
                         <button wire:click="resetForm" class="flex-1 sm:flex-none px-4 py-2.5 bg-red-50 text-red-600 rounded-xl font-semibold hover:bg-red-100 transition-all text-xs">Reset</button>
                     </div>
                 </div>
-
                 <div class="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4">
                     @php 
                         $countDouble = collect($readyGroups)->flatten(1)->count() * 2;
@@ -112,7 +110,6 @@
                         <p class="text-2xl md:text-3xl font-black text-red-600">{{ collect($icloudStatus)->where('status', 'OFF')->count() }}</p>
                     </div>
                 </div>
-
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 text-center">
                     @if (!empty($readyGroups))
                         <div class="space-y-4">
@@ -136,7 +133,6 @@
                             @endforeach
                         </div>
                     @endif
-
                     <div class="space-y-4">
                         @if (!empty($pairedSingles))
                             <div class="flex items-center gap-2 px-2"><div class="w-1 h-6 bg-orange-500 rounded-full"></div><h3 class="font-bold text-orange-600 text-sm uppercase">Merged</h3></div>
@@ -156,7 +152,6 @@
                                 </div>
                             @endforeach
                         @endif
-
                         @if ($leftoverSingle)
                             <div class="flex items-center gap-2 px-2 mt-6"><div class="w-1 h-6 bg-red-500 rounded-full"></div><h3 class="font-bold text-red-600 text-sm uppercase">Odd</h3></div>
                             <div class="bg-white p-4 rounded-2xl shadow-sm border border-zinc-200">
@@ -174,7 +169,6 @@
             </div>
         @endif
     </div>
-
     @if ($showModal && $selectedItem)
         <div class="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-md p-2 md:p-4 overflow-y-auto">
             <div class="relative w-full max-w-sm my-auto">
@@ -192,103 +186,57 @@
             </div>
         </div>
     @endif
-
     <div id="zip-temp-area" style="position: absolute; left: -9999px; top: -9999px;"></div>
-
     <script>
         window.addEventListener('modalOpened', event => {
             setTimeout(() => { if(window.JsBarcode) JsBarcode(".barcode-svg").init(); }, 300);
         });
-
         async function downloadZip(type) {
             const zip = new JSZip();
             const btn = document.getElementById('btn-zip-' + type);
             const otherBtn = document.getElementById('btn-zip-' + (type === 'double' ? 'single' : 'double'));
             const originalText = btn.innerHTML;
             const tempArea = document.getElementById('zip-temp-area');
-
-            // LOCK BOTH BUTTONS
-            btn.disabled = true;
-            if(otherBtn) otherBtn.disabled = true;
+            btn.disabled = true; if(otherBtn) otherBtn.disabled = true;
             btn.classList.add('opacity-75', 'cursor-wait');
-            if(otherBtn) otherBtn.classList.add('opacity-50', 'cursor-not-allowed');
-
             try {
-                const data = (type === 'double') 
-                    ? await @this.getDoubleDataForZip() 
-                    : await @this.getSingleDataForZip();
-
-                if (data.length === 0) {
-                    alert('Tidak ada data.');
-                    restoreButtons();
-                    return;
-                }
-
+                const data = (type === 'double') ? await @this.getDoubleDataForZip() : await @this.getSingleDataForZip();
+                if (data.length === 0) { alert('Tidak ada data.'); restoreButtons(); return; }
                 for (let i = 0; i < data.length; i++) {
-                    const item = data[i];
                     btn.innerHTML = `<span class="mdi mdi-loading mdi-spin"></span> Process ${i+1}/${data.length}`;
-                    
-                    tempArea.innerHTML = item.html;
-                    
-                    const barcodeElements = tempArea.querySelectorAll(".barcode-svg");
-                    barcodeElements.forEach(el => {
-                        const val = el.getAttribute('data-value');
-                        if (val && val !== '') JsBarcode(el).init();
-                    });
-                    
-                    await new Promise(r => setTimeout(r, 300));
-                    
-                    const canvas = await html2canvas(tempArea.firstChild, { 
-                        scale: 2.5, 
-                        useCORS: true, 
-                        backgroundColor: null,
-                        logging: false
-                    });
-                    
-                    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png', 1.0));
-                    zip.file(`${type.toUpperCase()}_${item.imei1}.png`, blob);
-                    tempArea.innerHTML = '';
+                    tempArea.innerHTML = data[i].html;
+                    const barcodes = tempArea.querySelectorAll(".barcode-svg");
+                    barcodes.forEach(el => { if(el.getAttribute('data-value')) JsBarcode(el).init(); });
+                    await new Promise(r => setTimeout(r, 150));
+                    const canvas = await html2canvas(tempArea.firstChild, { scale: 2, useCORS: true, logging: false });
+                    const blob = await new Promise(res => canvas.toBlob(res, 'image/png', 0.8));
+                    zip.file(`${type.toUpperCase()}_${data[i].imei1}.png`, blob);
+                    tempArea.innerHTML = ''; // FREE MEMORY
+                    if (i % 10 === 0) await new Promise(r => setTimeout(r, 100)); // BREATHING ROOM
                 }
-                
                 btn.innerHTML = `<span class="mdi mdi-loading mdi-spin"></span> Compressing...`;
                 const content = await zip.generateAsync({type: "blob"});
-                
-                // NAMING LOGIC: "30 IMEI DOUBLE.zip" or "15 IMEI SINGLE.zip"
-                const zipFileName = `${data.length} IMEI ${type.toUpperCase()}.zip`;
-                saveAs(content, zipFileName);
-                
-            } catch (error) {
-                console.error(error);
-                alert('Rendering failed. Please try a smaller batch.');
-            } finally {
-                restoreButtons();
-            }
-
+                saveAs(content, `${data.length} IMEI ${type.toUpperCase()}.zip`);
+            } catch (e) { alert('Error: Memory Full atau Connection Lost.'); } finally { restoreButtons(); }
             function restoreButtons() {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-                if(otherBtn) {
-                    otherBtn.disabled = false;
-                    otherBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-                }
-                btn.classList.remove('opacity-75', 'cursor-wait');
+                btn.innerHTML = originalText; btn.disabled = false;
+                if(otherBtn) { otherBtn.disabled = false; otherBtn.classList.remove('opacity-50'); }
+                btn.classList.remove('opacity-75');
             }
         }
-
         function downloadCardPng() {
             const area = document.getElementById('capture-area').firstElementChild;
-            html2canvas(area, { scale: 3.5, useCORS: true, backgroundColor: null, logging: false }).then(canvas => {
+            html2canvas(area, { scale: 3, useCORS: true }).then(canvas => {
                 const link = document.createElement('a');
                 link.download = `DeviceInfo-${Date.now()}.png`;
-                link.href = canvas.toDataURL('image/png', 1.0);
+                link.href = canvas.toDataURL('image/png', 0.9);
                 link.click();
             });
         }
-
         function copyToClipboard(text) {
             if (!text) return;
-            const cleanText = text.replace(/\\n/g, '\n');
-            navigator.clipboard.writeText(cleanText).then(() => alert('Copied!'));
+            const clean = text.replace(/\\n/g, '\n');
+            navigator.clipboard.writeText(clean).then(() => alert('Copied!'));
         }
     </script>
 </div>
