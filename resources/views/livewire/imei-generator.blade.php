@@ -211,8 +211,8 @@
                     const canvas = await html2canvas(tempArea.firstChild, { scale: 2, useCORS: true, logging: false });
                     const blob = await new Promise(res => canvas.toBlob(res, 'image/png', 0.8));
                     zip.file(`${type.toUpperCase()}_${data[i].imei1}.png`, blob);
-                    tempArea.innerHTML = ''; // FREE MEMORY
-                    if (i % 10 === 0) await new Promise(r => setTimeout(r, 100)); // BREATHING ROOM
+                    tempArea.innerHTML = '';
+                    if (i % 10 === 0) await new Promise(r => setTimeout(r, 100));
                 }
                 btn.innerHTML = `<span class="mdi mdi-loading mdi-spin"></span> Compressing...`;
                 const content = await zip.generateAsync({type: "blob"});
