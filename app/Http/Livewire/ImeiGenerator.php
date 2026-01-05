@@ -94,12 +94,13 @@ class ImeiGenerator extends Component
     public function getDoubleDataForZip() {
         $data = [];
         $view = ($this->selectedCardType == 'iphone14') ? 'livewire.partials.iphone-14-card' : 'livewire.partials.iphone-card';
-        $currentTheme = 'dark'; // Mulai dari dark
+        $index = 0;
         foreach($this->readyGroups as $tac => $pairs) {
             foreach($pairs as $p) {
+                $currentTheme = ($index % 2 == 0) ? 'light' : 'dark';
                 $item = $this->createItemData($p['imei1'], $p['imei2'], $currentTheme);
                 $data[] = ['imei1' => $p['imei1'], 'html' => view($view, ['item' => $item, 'id' => 'zd-'.$p['imei1']])->render()];
-                $currentTheme = ($currentTheme == 'light') ? 'dark' : 'light';
+                $index++;
             }
         }
         return $data;
@@ -108,13 +109,15 @@ class ImeiGenerator extends Component
     public function getSingleDataForZip() {
         $data = [];
         $view = ($this->selectedCardType == 'iphone14') ? 'livewire.partials.iphone-14-card' : 'livewire.partials.iphone-card';
-        $currentTheme = 'dark'; // Mulai dari dark
+        $index = 0;
         foreach($this->pairedSingles as $ps) {
+            $currentTheme = ($index % 2 == 0) ? 'light' : 'dark';
             $item = $this->createItemData($ps[0], $ps[1], $currentTheme);
             $data[] = ['imei1' => $ps[0], 'html' => view($view, ['item' => $item, 'id' => 'zs-'.$ps[0]])->render()];
-            $currentTheme = ($currentTheme == 'light') ? 'dark' : 'light';
+            $index++;
         }
         if($this->leftoverSingle) {
+            $currentTheme = ($index % 2 == 0) ? 'light' : 'dark';
             $item = $this->createItemData($this->leftoverSingle, null, $currentTheme);
             $data[] = ['imei1' => $this->leftoverSingle, 'html' => view($view, ['item' => $item, 'id' => 'zs-'.$this->leftoverSingle])->render()];
         }
