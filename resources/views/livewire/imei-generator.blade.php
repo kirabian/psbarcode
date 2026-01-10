@@ -122,8 +122,28 @@
                                             <div><p class="text-zinc-400 font-bold mb-1 tracking-tight">IMEI 2</p><p class="font-black text-zinc-900">{{ $item['imei2'] }}</p></div>
                                         </div>
                                         <div class="flex gap-2">
-                                            <button wire:click="checkIcloud('{{ $item['imei1'] }}')" class="flex-1 py-2.5 rounded-xl text-[10px] font-bold transition-all {{ isset($icloudStatus[$item['imei1']]) && $icloudStatus[$item['imei1']]['status'] == 'ON' ? 'bg-red-500 text-white' : (isset($icloudStatus[$item['imei1']]) && $icloudStatus[$item['imei1']]['status'] == 'OFF' ? 'bg-emerald-500 text-white' : 'bg-zinc-100 text-zinc-700') }}">{{ $icloudStatus[$item['imei1']]['status'] ?? 'CHECK 1' }}</button>
-                                            <button wire:click="checkIcloud('{{ $item['imei2'] }}')" class="flex-1 py-2.5 rounded-xl text-[10px] font-bold transition-all {{ isset($icloudStatus[$item['imei2']]) && $icloudStatus[$item['imei2']]['status'] == 'ON' ? 'bg-red-500 text-white' : (isset($icloudStatus[$item['imei2']]) && $icloudStatus[$item['imei2']]['status'] == 'OFF' ? 'bg-emerald-500 text-white' : 'bg-zinc-100 text-zinc-700') }}">{{ $icloudStatus[$item['imei2']]['status'] ?? 'CHECK 2' }}</button>
+                                            <button wire:click="checkIcloud('{{ $item['imei1'] }}')" 
+                                                wire:loading.attr="disabled"
+                                                wire:target="checkIcloud('{{ $item['imei1'] }}')"
+                                                class="flex-1 py-2.5 rounded-xl text-[10px] font-bold transition-all {{ isset($icloudStatus[$item['imei1']]) && $icloudStatus[$item['imei1']]['status'] == 'ON' ? 'bg-red-500 text-white' : (isset($icloudStatus[$item['imei1']]) && $icloudStatus[$item['imei1']]['status'] == 'OFF' ? 'bg-emerald-500 text-white' : 'bg-zinc-100 text-zinc-700') }}">
+                                                <span wire:loading.remove wire:target="checkIcloud('{{ $item['imei1'] }}')">
+                                                    {{ $icloudStatus[$item['imei1']]['status'] ?? 'CHECK 1' }}
+                                                </span>
+                                                <span wire:loading wire:target="checkIcloud('{{ $item['imei1'] }}')">
+                                                    <span class="mdi mdi-loading mdi-spin"></span>
+                                                </span>
+                                            </button>
+                                            <button wire:click="checkIcloud('{{ $item['imei2'] }}')" 
+                                                wire:loading.attr="disabled"
+                                                wire:target="checkIcloud('{{ $item['imei2'] }}')"
+                                                class="flex-1 py-2.5 rounded-xl text-[10px] font-bold transition-all {{ isset($icloudStatus[$item['imei2']]) && $icloudStatus[$item['imei2']]['status'] == 'ON' ? 'bg-red-500 text-white' : (isset($icloudStatus[$item['imei2']]) && $icloudStatus[$item['imei2']]['status'] == 'OFF' ? 'bg-emerald-500 text-white' : 'bg-zinc-100 text-zinc-700') }}">
+                                                <span wire:loading.remove wire:target="checkIcloud('{{ $item['imei2'] }}')">
+                                                    {{ $icloudStatus[$item['imei2']]['status'] ?? 'CHECK 2' }}
+                                                </span>
+                                                <span wire:loading wire:target="checkIcloud('{{ $item['imei2'] }}')">
+                                                    <span class="mdi mdi-loading mdi-spin"></span>
+                                                </span>
+                                            </button>
                                             @if ($viewMode == 'card')
                                                 <button wire:click="openCard('{{ $item['imei1'] }}', '{{ $item['imei2'] }}')" class="px-4 py-2.5 bg-blue-500 text-white rounded-xl font-bold text-[10px]">CARD</button>
                                             @endif
@@ -143,8 +163,28 @@
                                         <div><p class="text-orange-600 font-bold mb-1 tracking-tight">IMEI B</p><p class="font-black text-zinc-900">{{ $pair[1] }}</p></div>
                                     </div>
                                     <div class="flex gap-2">
-                                        <button wire:click="checkIcloud('{{ $pair[0] }}')" class="flex-1 py-2.5 rounded-xl text-[10px] font-bold transition-all {{ isset($icloudStatus[$pair[0]]) && $icloudStatus[$pair[0]]['status'] == 'ON' ? 'bg-red-500 text-white' : (isset($icloudStatus[$pair[0]]) && $icloudStatus[$pair[0]]['status'] == 'OFF' ? 'bg-emerald-500 text-white' : 'bg-zinc-100 text-zinc-700') }}">{{ $icloudStatus[$pair[0]]['status'] ?? 'CHECK A' }}</button>
-                                        <button wire:click="checkIcloud('{{ $pair[1] }}')" class="flex-1 py-2.5 rounded-xl text-[10px] font-bold transition-all {{ isset($icloudStatus[$pair[1]]) && $icloudStatus[$pair[1]]['status'] == 'ON' ? 'bg-red-500 text-white' : (isset($icloudStatus[$pair[1]]) && $icloudStatus[$pair[1]]['status'] == 'OFF' ? 'bg-emerald-500 text-white' : 'bg-zinc-100 text-zinc-700') }}">{{ $icloudStatus[$pair[1]]['status'] ?? 'CHECK B' }}</button>
+                                        <button wire:click="checkIcloud('{{ $pair[0] }}')" 
+                                            wire:loading.attr="disabled"
+                                            wire:target="checkIcloud('{{ $pair[0] }}')"
+                                            class="flex-1 py-2.5 rounded-xl text-[10px] font-bold transition-all {{ isset($icloudStatus[$pair[0]]) && $icloudStatus[$pair[0]]['status'] == 'ON' ? 'bg-red-500 text-white' : (isset($icloudStatus[$pair[0]]) && $icloudStatus[$pair[0]]['status'] == 'OFF' ? 'bg-emerald-500 text-white' : 'bg-zinc-100 text-zinc-700') }}">
+                                            <span wire:loading.remove wire:target="checkIcloud('{{ $pair[0] }}')">
+                                                {{ $icloudStatus[$pair[0]]['status'] ?? 'CHECK A' }}
+                                            </span>
+                                            <span wire:loading wire:target="checkIcloud('{{ $pair[0] }}')">
+                                                <span class="mdi mdi-loading mdi-spin"></span>
+                                            </span>
+                                        </button>
+                                        <button wire:click="checkIcloud('{{ $pair[1] }}')" 
+                                            wire:loading.attr="disabled"
+                                            wire:target="checkIcloud('{{ $pair[1] }}')"
+                                            class="flex-1 py-2.5 rounded-xl text-[10px] font-bold transition-all {{ isset($icloudStatus[$pair[1]]) && $icloudStatus[$pair[1]]['status'] == 'ON' ? 'bg-red-500 text-white' : (isset($icloudStatus[$pair[1]]) && $icloudStatus[$pair[1]]['status'] == 'OFF' ? 'bg-emerald-500 text-white' : 'bg-zinc-100 text-zinc-700') }}">
+                                            <span wire:loading.remove wire:target="checkIcloud('{{ $pair[1] }}')">
+                                                {{ $icloudStatus[$pair[1]]['status'] ?? 'CHECK B' }}
+                                            </span>
+                                            <span wire:loading wire:target="checkIcloud('{{ $pair[1] }}')">
+                                                <span class="mdi mdi-loading mdi-spin"></span>
+                                            </span>
+                                        </button>
                                         @if ($viewMode == 'card')
                                             <button wire:click="openCard('{{ $pair[0] }}', '{{ $pair[1] }}')" class="px-4 py-2.5 bg-orange-500 text-white rounded-xl font-bold text-[10px]">CARD</button>
                                         @endif
@@ -157,7 +197,17 @@
                             <div class="bg-white p-4 rounded-2xl shadow-sm border border-zinc-200">
                                 <div class="mb-4 font-mono text-xs font-black text-zinc-900">{{ $leftoverSingle }}</div>
                                 <div class="flex gap-2">
-                                    <button wire:click="checkIcloud('{{ $leftoverSingle }}')" class="flex-1 py-2.5 rounded-xl text-[10px] font-bold transition-all {{ isset($icloudStatus[$leftoverSingle]) && $icloudStatus[$leftoverSingle]['status'] == 'ON' ? 'bg-red-500 text-white' : (isset($icloudStatus[$leftoverSingle]) && $icloudStatus[$leftoverSingle]['status'] == 'OFF' ? 'bg-emerald-500 text-white' : 'bg-zinc-100 text-zinc-700') }}">{{ $icloudStatus[$leftoverSingle]['status'] ?? 'CHECK SINGLE' }}</button>
+                                    <button wire:click="checkIcloud('{{ $leftoverSingle }}')" 
+                                        wire:loading.attr="disabled"
+                                        wire:target="checkIcloud('{{ $leftoverSingle }}')"
+                                        class="flex-1 py-2.5 rounded-xl text-[10px] font-bold transition-all {{ isset($icloudStatus[$leftoverSingle]) && $icloudStatus[$leftoverSingle]['status'] == 'ON' ? 'bg-red-500 text-white' : (isset($icloudStatus[$leftoverSingle]) && $icloudStatus[$leftoverSingle]['status'] == 'OFF' ? 'bg-emerald-500 text-white' : 'bg-zinc-100 text-zinc-700') }}">
+                                        <span wire:loading.remove wire:target="checkIcloud('{{ $leftoverSingle }}')">
+                                            {{ $icloudStatus[$leftoverSingle]['status'] ?? 'CHECK SINGLE' }}
+                                        </span>
+                                        <span wire:loading wire:target="checkIcloud('{{ $leftoverSingle }}')">
+                                            <span class="mdi mdi-loading mdi-spin"></span>
+                                        </span>
+                                    </button>
                                     @if ($viewMode == 'card')
                                         <button wire:click="openCard('{{ $leftoverSingle }}', null)" class="px-4 py-2.5 bg-red-50 text-white rounded-xl font-bold text-[10px]">CARD</button>
                                     @endif
