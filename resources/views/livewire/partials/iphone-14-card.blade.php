@@ -10,6 +10,11 @@
     $closeBtnBg = $isDark ? '#1c1c1e' : '#ffffff';
     $closeIcon = $isDark ? '#ffffff' : '#3c3c43';
 
+    // Logika Fix Pinggiran Putih:
+    // Jika Dark Mode, border jadi hitam (#000000) agar pinggiran putih tertutup/invisible.
+    // Jika Light Mode, border jadi abu-abu/putih (sesuai selera, di sini diset #d2d2d7).
+    $borderColor = $isDark ? '#000000' : '#d2d2d7';
+
     // Logika Jam & Menit Random Mix
     $randomHour = str_pad(mt_rand(1, 23), 2, '0', STR_PAD_LEFT);
     $randomMinute = str_pad(mt_rand(0, 59), 2, '0', STR_PAD_LEFT);
@@ -49,7 +54,7 @@
 @endphp
 
 <div id="{{ $id }}" class="iphone-screen"
-    style="width: 375px; height: 812px; background-color: {{ $bgMain }}; color: {{ $textColor }}; font-family: -apple-system, BlinkMacSystemFont, sans-serif; position: relative; overflow: hidden; border-radius: 50px; box-sizing: border-box; -webkit-font-smoothing: antialiased;">
+    style="width: 375px; height: 812px; background-color: {{ $bgMain }}; border: 4px solid {{ $borderColor }}; color: {{ $textColor }}; font-family: -apple-system, BlinkMacSystemFont, sans-serif; position: relative; overflow: hidden; border-radius: 50px; box-sizing: border-box; -webkit-font-smoothing: antialiased;">
     
     <div
         style="display: flex; justify-content: space-between; padding: 0 26px; align-items: center; position: absolute; top: 11px; left: 0; width: 100%; height: 44px; z-index: 150; box-sizing: border-box;">
