@@ -52,7 +52,7 @@
     style="width: 375px; height: 812px; background-color: {{ $bgMain }}; color: {{ $textColor }}; font-family: -apple-system, BlinkMacSystemFont, sans-serif; position: relative; overflow: hidden; border-radius: 50px; box-sizing: border-box; -webkit-font-smoothing: antialiased;">
     
     <div
-        style="display: flex; justify-content: space-between; padding: 0 26px; align-items: center; position: absolute; top: 11px; left: 0; width: 100%; height: 44px; z-index: 150; box-sizing: border-box;">
+        style="display: flex; justify-content: space-between; padding: 0 26px; align-items: center; position: absolute; top: 7px; left: 0; width: 100%; height: 44px; z-index: 150; box-sizing: border-box;">
         <svg width="60" height="44">
             <text x="5" y="25" font-family="sans-serif" font-size="16" font-weight="600" fill="{{ $headerColor }}"
                 letter-spacing="-0.3px">{{ $displayHour }}:{{ $displayMinute }}</text>
