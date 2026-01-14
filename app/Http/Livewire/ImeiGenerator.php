@@ -110,17 +110,17 @@ class ImeiGenerator extends Component
         $data = [];
         $view = ($this->selectedCardType == 'iphone14') ? 'livewire.partials.iphone-14-card' : 'livewire.partials.iphone-card';
         $index = 0;
+        
+        // Loop hanya untuk Paired Singles (Single yang berpasangan)
         foreach($this->pairedSingles as $ps) {
             $currentTheme = ($index % 2 == 0) ? 'light' : 'dark';
             $item = $this->createItemData($ps[0], $ps[1], $currentTheme);
             $data[] = ['imei1' => $ps[0], 'html' => view($view, ['item' => $item, 'id' => 'zs-'.$ps[0]])->render()];
             $index++;
         }
-        if($this->leftoverSingle) {
-            $currentTheme = ($index % 2 == 0) ? 'light' : 'dark';
-            $item = $this->createItemData($this->leftoverSingle, null, $currentTheme);
-            $data[] = ['imei1' => $this->leftoverSingle, 'html' => view($view, ['item' => $item, 'id' => 'zs-'.$this->leftoverSingle])->render()];
-        }
+        
+        // LOGIC LEFTOVER SINGLE DIHAPUS DARI SINI AGAR TIDAK MASUK ZIP
+        
         return $data;
     }
 

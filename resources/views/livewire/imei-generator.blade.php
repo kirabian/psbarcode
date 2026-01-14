@@ -225,11 +225,8 @@
                                         class="flex-1 py-2.5 rounded-xl text-[10px] font-bold transition-all {{ isset($icloudStatus[$leftoverSingle]) && $icloudStatus[$leftoverSingle]['status'] == 'ON' ? 'bg-red-500 text-white' : (isset($icloudStatus[$leftoverSingle]) && $icloudStatus[$leftoverSingle]['status'] == 'OFF' ? 'bg-emerald-500 text-white' : 'bg-zinc-100 text-zinc-700') }}">
                                         {{ $icloudStatus[$leftoverSingle]['status'] ?? 'CHECK SINGLE' }}
                                     </button>
-                                    @if ($viewMode == 'card')
-                                        <button wire:click="openCard('{{ $leftoverSingle }}', null)"
-                                            class="px-4 py-2.5 bg-red-50 text-white rounded-xl font-bold text-[10px]">CARD</button>
-                                    @endif
-                                </div>
+                                    
+                                    </div>
                             </div>
                         @endif
                     </div>
