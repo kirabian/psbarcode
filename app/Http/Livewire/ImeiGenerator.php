@@ -9,7 +9,6 @@ class ImeiGenerator extends Component
 {
     public $inputText = '';
     public $readyGroups = [];
-    public $randomItems = [];
     public $pairedSingles = [];
     public $leftoverSingle = null;
     public $showModal = false;
@@ -29,23 +28,25 @@ class ImeiGenerator extends Component
         $allImeis = array_unique($matches[0]);
         if (empty($allImeis)) return;
 
-        $this->readyGroups = []; $this->randomItems = [];
-        $this->pairedSingles = []; $this->leftoverSingle = null;
-        
-        $grouped = collect($allImeis)->groupBy(fn ($imei) => substr($imei, 0, 8));
-        foreach ($grouped as $tac => $imeis) {
-            $chunked = $imeis->chunk(2);
-            foreach ($chunked as $chunk) {
+        $this->reset(['readyGroups', 'pairedSingles', 'leftoverSingle']);
+        $randomItems = [];
+
+        // Logic Pengelompokan (Refactored)
+        collect($allImeis)->groupBy(fn($i) => substr($i, 0, 8))->each(function($group, $tac) use (&$randomItems) {
+            $group->chunk(2)->each(function($chunk) use ($tac, &$randomItems) {
                 if ($chunk->count() === 2) {
                     $this->readyGroups[$tac][] = ['imei1' => $chunk->first(), 'imei2' => $chunk->last()];
-                } else { $this->randomItems[] = $chunk->first(); }
-            }
-        }
-        if (!empty($this->randomItems)) {
-            $sc = collect($this->randomItems)->values();
-            if ($sc->count() % 2 !== 0) { $this->leftoverSingle = $sc->pop(); }
-            if ($sc->isNotEmpty()) { $this->pairedSingles = $sc->chunk(2)->map(fn ($c) => $c->values()->toArray())->toArray(); }
-        }
+                } else {
+                    $randomItems[] = $chunk->first();
+                }
+            });
+        });
+
+        // Handle Sisa/Random
+        $sc = collect($randomItems)->values();
+        if ($sc->count() % 2 !== 0) $this->leftoverSingle = $sc->pop();
+        if ($sc->isNotEmpty()) $this->pairedSingles = $sc->chunk(2)->map->values()->toArray();
+
         $this->viewMode = 'select';
     }
 
@@ -55,13 +56,11 @@ class ImeiGenerator extends Component
     {
         if (!$imei || (isset($this->icloudStatus[$imei]) && in_array($this->icloudStatus[$imei]['status'], ['ON', 'OFF']))) return;
         $this->icloudStatus[$imei] = ['status' => 'Checking...', 'color' => 'orange'];
+        
         try {
-            $response = Http::asForm()->timeout(20)->post($this->apiUrl, ['service' => $this->serviceId, 'imei' => $imei, 'key' => $this->apiKey]);
-            if ($response->successful()) {
-                $res = $response->json();
-                $isON = isset($res['object']['fmiOn']) ? (bool)$res['object']['fmiOn'] : (str_contains(strtoupper($res['response'] ?? ''), 'ON') && !str_contains(strtoupper($res['response'] ?? ''), 'OFF'));
-                $this->icloudStatus[$imei] = ['status' => $isON ? 'ON' : 'OFF'];
-            }
+            $res = Http::asForm()->timeout(20)->post($this->apiUrl, ['service' => $this->serviceId, 'imei' => $imei, 'key' => $this->apiKey])->json();
+            $isON = isset($res['object']['fmiOn']) ? (bool)$res['object']['fmiOn'] : (str_contains(strtoupper($res['response'] ?? ''), 'ON') && !str_contains(strtoupper($res['response'] ?? ''), 'OFF'));
+            $this->icloudStatus[$imei] = ['status' => $isON ? 'ON' : 'OFF'];
         } catch (\Exception $e) { $this->icloudStatus[$imei] = ['status' => 'ERR']; }
     }
 
@@ -92,35 +91,20 @@ class ImeiGenerator extends Component
     }
 
     public function getDoubleDataForZip() {
-        $data = [];
         $view = ($this->selectedCardType == 'iphone14') ? 'livewire.partials.iphone-14-card' : 'livewire.partials.iphone-card';
-        $index = 0;
-        foreach($this->readyGroups as $tac => $pairs) {
-            foreach($pairs as $p) {
-                $currentTheme = ($index % 2 == 0) ? 'light' : 'dark';
-                $item = $this->createItemData($p['imei1'], $p['imei2'], $currentTheme);
-                $data[] = ['imei1' => $p['imei1'], 'html' => view($view, ['item' => $item, 'id' => 'zd-'.$p['imei1']])->render()];
-                $index++;
-            }
+        $data = []; $i = 0;
+        foreach($this->readyGroups as $pairs) foreach($pairs as $p) {
+            $data[] = ['imei1' => $p['imei1'], 'html' => view($view, ['item' => $this->createItemData($p['imei1'], $p['imei2'], ($i++ % 2 == 0) ? 'light' : 'dark'), 'id' => 'zd-'.$p['imei1']])->render()];
         }
         return $data;
     }
 
     public function getSingleDataForZip() {
-        $data = [];
         $view = ($this->selectedCardType == 'iphone14') ? 'livewire.partials.iphone-14-card' : 'livewire.partials.iphone-card';
-        $index = 0;
-        
-        // Loop hanya untuk Paired Singles (Single yang berpasangan)
+        $data = []; $i = 0;
         foreach($this->pairedSingles as $ps) {
-            $currentTheme = ($index % 2 == 0) ? 'light' : 'dark';
-            $item = $this->createItemData($ps[0], $ps[1], $currentTheme);
-            $data[] = ['imei1' => $ps[0], 'html' => view($view, ['item' => $item, 'id' => 'zs-'.$ps[0]])->render()];
-            $index++;
+            $data[] = ['imei1' => $ps[0], 'html' => view($view, ['item' => $this->createItemData($ps[0], $ps[1], ($i++ % 2 == 0) ? 'light' : 'dark'), 'id' => 'zs-'.$ps[0]])->render()];
         }
-        
-        // LOGIC LEFTOVER SINGLE DIHAPUS DARI SINI AGAR TIDAK MASUK ZIP
-        
         return $data;
     }
 
