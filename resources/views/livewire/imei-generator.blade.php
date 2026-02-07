@@ -14,10 +14,13 @@
                     </div>
                     Input Data IMEI
                 </h2>
-                <textarea wire:model.defer="inputText" rows="10" class="w-full p-4 border border-zinc-200 rounded-2xl font-mono text-sm focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-zinc-50 focus:bg-white transition-all outline-none" placeholder="Paste IMEI list here..."></textarea>
+                <textarea wire:model.defer="inputText" rows="10"
+                    class="w-full p-4 border border-zinc-200 rounded-2xl font-mono text-sm focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-zinc-50 focus:bg-white transition-all outline-none"
+                    placeholder="Paste IMEI list here..."></textarea>
                 <div class="mt-4 flex flex-col md:flex-row justify-between items-center gap-4">
                     <div class="text-sm text-zinc-500 font-medium order-2 md:order-1">Format: 15 digit numbers</div>
-                    <button wire:click="organize" class="w-full md:w-auto px-6 py-3 bg-emerald-500 text-white rounded-xl font-semibold shadow-sm hover:bg-emerald-600 transition-all active:scale-95 flex items-center justify-center gap-2 order-1 md:order-2">
+                    <button wire:click="organize"
+                        class="w-full md:w-auto px-6 py-3 bg-emerald-500 text-white rounded-xl font-semibold shadow-sm hover:bg-emerald-600 transition-all active:scale-95 flex items-center justify-center gap-2 order-1 md:order-2">
                         <span class="mdi mdi-play"></span> Process Data
                     </button>
                 </div>
@@ -26,15 +29,19 @@
             <div class="max-w-4xl mx-auto py-12 text-center px-4">
                 <h2 class="text-3xl font-bold text-zinc-900 mb-10">Select Operation Mode</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <button wire:click="setView('card')" class="group p-8 md:p-10 bg-white rounded-3xl shadow-lg border-2 border-zinc-200 hover:border-emerald-500 transition-all">
-                        <div class="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-emerald-500 transition-colors">
+                    <button wire:click="setView('card')"
+                        class="group p-8 md:p-10 bg-white rounded-3xl shadow-lg border-2 border-zinc-200 hover:border-emerald-500 transition-all">
+                        <div
+                            class="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-emerald-500 transition-colors">
                             <span class="mdi mdi-qrcode-scan text-3xl text-emerald-600 group-hover:text-white"></span>
                         </div>
                         <h3 class="text-xl font-bold text-zinc-900">Generate Barcode</h3>
                         <p class="text-sm text-zinc-500 mt-2">Create barcode cards for IMEIs</p>
                     </button>
-                    <button wire:click="setView('checker')" class="group p-8 md:p-10 bg-white rounded-3xl shadow-lg border-2 border-zinc-200 hover:border-blue-500 transition-all">
-                        <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-500 transition-colors">
+                    <button wire:click="setView('checker')"
+                        class="group p-8 md:p-10 bg-white rounded-3xl shadow-lg border-2 border-zinc-200 hover:border-blue-500 transition-all">
+                        <div
+                            class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-500 transition-colors">
                             <span class="mdi mdi-shield-check text-3xl text-blue-600 group-hover:text-white"></span>
                         </div>
                         <h3 class="text-xl font-bold text-zinc-900">iCloud Checker</h3>
@@ -44,38 +51,49 @@
             </div>
         @else
             <div class="space-y-6">
-                <div class="bg-white p-4 md:p-6 rounded-3xl shadow-lg border border-zinc-200 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+                <div
+                    class="bg-white p-4 md:p-6 rounded-3xl shadow-lg border border-zinc-200 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
                     <div class="flex items-center gap-3">
-                        <button wire:click="setView('select')" class="p-2.5 bg-zinc-100 text-zinc-700 rounded-xl hover:bg-zinc-200 transition-all">
+                        <button wire:click="setView('select')"
+                            class="p-2.5 bg-zinc-100 text-zinc-700 rounded-xl hover:bg-zinc-200 transition-all">
                             <span class="mdi mdi-arrow-left text-xl"></span>
                         </button>
-                        <h2 class="text-lg md:text-xl font-bold text-zinc-900 line-clamp-1 uppercase tracking-tight">{{ $viewMode }} Panel</h2>
+                        <h2 class="text-lg md:text-xl font-bold text-zinc-900 line-clamp-1 uppercase tracking-tight">
+                            {{ $viewMode }} Panel</h2>
                     </div>
                     <div class="flex flex-wrap items-center gap-2 w-full lg:w-auto">
                         <div class="flex bg-zinc-100 p-1 rounded-xl gap-1 w-full sm:w-auto overflow-x-auto">
-                            <button onclick="copyToClipboard(`{{ $this->getAllImeisString() }}`)" class="flex-1 sm:flex-none px-3 py-1.5 hover:bg-white rounded-lg text-xs font-bold text-zinc-600 transition-all">All</button>
-                            <button onclick="copyToClipboard(`{{ $this->getDoubleImeisString() }}`)" class="flex-1 sm:flex-none px-3 py-1.5 hover:bg-white rounded-lg text-xs font-bold text-blue-600 transition-all">Double</button>
-                            <button onclick="copyToClipboard(`{{ $this->getSingleImeisString() }}`)" class="flex-1 sm:flex-none px-3 py-1.5 hover:bg-white rounded-lg text-xs font-bold text-orange-600 transition-all">Single</button>
+                            <button onclick="copyToClipboard(`{{ $this->getAllImeisString() }}`)"
+                                class="flex-1 sm:flex-none px-3 py-1.5 hover:bg-white rounded-lg text-xs font-bold text-zinc-600 transition-all">All</button>
+                            <button onclick="copyToClipboard(`{{ $this->getDoubleImeisString() }}`)"
+                                class="flex-1 sm:flex-none px-3 py-1.5 hover:bg-white rounded-lg text-xs font-bold text-blue-600 transition-all">Double</button>
+                            <button onclick="copyToClipboard(`{{ $this->getSingleImeisString() }}`)"
+                                class="flex-1 sm:flex-none px-3 py-1.5 hover:bg-white rounded-lg text-xs font-bold text-orange-600 transition-all">Single</button>
                         </div>
-                        <button wire:click="checkAllIcloud" wire:loading.attr="disabled" class="flex-1 sm:flex-none px-4 py-2.5 bg-orange-500 text-white rounded-xl font-semibold text-xs hover:bg-orange-600 flex items-center justify-center gap-2 transition-all">
+                        <button wire:click="checkAllIcloud" wire:loading.attr="disabled"
+                            class="flex-1 sm:flex-none px-4 py-2.5 bg-orange-500 text-white rounded-xl font-semibold text-xs hover:bg-orange-600 flex items-center justify-center gap-2 transition-all">
                             <span wire:loading wire:target="checkAllIcloud" class="mdi mdi-loading mdi-spin"></span>
                             <span wire:loading.remove wire:target="checkAllIcloud" class="mdi mdi-refresh"></span> Check All
                         </button>
                         @if ($viewMode == 'card')
                             <div class="flex gap-2 w-full sm:w-auto">
-                                <button onclick="downloadZip('double')" id="btn-zip-double" class="btn-zip flex-1 sm:flex-none px-4 py-2.5 bg-blue-600 text-white rounded-xl font-semibold text-xs hover:bg-blue-700 flex items-center justify-center gap-2 transition-all shadow-sm">
+                                <button onclick="downloadZip('double')" id="btn-zip-double"
+                                    class="btn-zip flex-1 sm:flex-none px-4 py-2.5 bg-blue-600 text-white rounded-xl font-semibold text-xs hover:bg-blue-700 flex items-center justify-center gap-2 transition-all shadow-sm">
                                     <span class="mdi mdi-zip-box"></span> ZIP Double
                                 </button>
-                                <button onclick="downloadZip('single')" id="btn-zip-single" class="btn-zip flex-1 sm:flex-none px-4 py-2.5 bg-orange-600 text-white rounded-xl font-semibold text-xs hover:bg-orange-700 flex items-center justify-center gap-2 transition-all shadow-sm">
+                                <button onclick="downloadZip('single')" id="btn-zip-single"
+                                    class="btn-zip flex-1 sm:flex-none px-4 py-2.5 bg-orange-600 text-white rounded-xl font-semibold text-xs hover:bg-orange-700 flex items-center justify-center gap-2 transition-all shadow-sm">
                                     <span class="mdi mdi-zip-box"></span> ZIP Single
                                 </button>
                             </div>
-                            <select wire:model="selectedCardType" class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl border border-zinc-200 font-semibold text-xs bg-white outline-none focus:ring-2 focus:ring-emerald-500">
+                            <select wire:model="selectedCardType"
+                                class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl border border-zinc-200 font-semibold text-xs bg-white outline-none focus:ring-2 focus:ring-emerald-500">
                                 <option value="iphone">iPhone Std</option>
                                 <option value="iphone14">iPhone 14</option>
                             </select>
                         @endif
-                        <button wire:click="resetForm" class="flex-1 sm:flex-none px-4 py-2.5 bg-red-50 text-red-600 rounded-xl font-semibold hover:bg-red-100 transition-all text-xs">Reset</button>
+                        <button wire:click="resetForm"
+                            class="flex-1 sm:flex-none px-4 py-2.5 bg-red-50 text-red-600 rounded-xl font-semibold hover:bg-red-100 transition-all text-xs">Reset</button>
                     </div>
                 </div>
 
@@ -101,11 +119,13 @@
                     </div>
                     <div class="bg-white p-4 md:p-5 rounded-2xl shadow-sm border border-zinc-200">
                         <p class="text-[10px] text-red-600 font-bold uppercase mb-1">iCloud ON</p>
-                        <p class="text-2xl md:text-3xl font-black text-red-600">{{ collect($icloudStatus)->where('status', 'ON')->count() }}</p>
+                        <p class="text-2xl md:text-3xl font-black text-red-600">
+                            {{ collect($icloudStatus)->where('status', 'ON')->count() }}</p>
                     </div>
                     <div class="bg-white p-4 md:p-5 rounded-2xl shadow-sm border border-zinc-200">
                         <p class="text-[10px] text-emerald-600 font-bold uppercase mb-1">iCloud OFF</p>
-                        <p class="text-2xl md:text-3xl font-black text-emerald-600">{{ collect($icloudStatus)->where('status', 'OFF')->count() }}</p>
+                        <p class="text-2xl md:text-3xl font-black text-emerald-600">
+                            {{ collect($icloudStatus)->where('status', 'OFF')->count() }}</p>
                     </div>
                 </div>
 
@@ -130,14 +150,17 @@
                                             </div>
                                         </div>
                                         <div class="flex gap-2">
-                                            <button wire:click="checkIcloud('{{ $item['imei1'] }}')" wire:loading.attr="disabled" class="flex-1 py-2.5 rounded-xl text-[10px] font-bold transition-all {{ isset($icloudStatus[$item['imei1']]) && $icloudStatus[$item['imei1']]['status'] == 'ON' ? 'bg-red-500 text-white' : (isset($icloudStatus[$item['imei1']]) && $icloudStatus[$item['imei1']]['status'] == 'OFF' ? 'bg-emerald-500 text-white' : 'bg-zinc-100 text-zinc-700') }}">
+                                            <button wire:click="checkIcloud('{{ $item['imei1'] }}')" wire:loading.attr="disabled"
+                                                class="flex-1 py-2.5 rounded-xl text-[10px] font-bold transition-all {{ isset($icloudStatus[$item['imei1']]) && $icloudStatus[$item['imei1']]['status'] == 'ON' ? 'bg-red-500 text-white' : (isset($icloudStatus[$item['imei1']]) && $icloudStatus[$item['imei1']]['status'] == 'OFF' ? 'bg-emerald-500 text-white' : 'bg-zinc-100 text-zinc-700') }}">
                                                 {{ $icloudStatus[$item['imei1']]['status'] ?? 'CHECK 1' }}
                                             </button>
-                                            <button wire:click="checkIcloud('{{ $item['imei2'] }}')" wire:loading.attr="disabled" class="flex-1 py-2.5 rounded-xl text-[10px] font-bold transition-all {{ isset($icloudStatus[$item['imei2']]) && $icloudStatus[$item['imei2']]['status'] == 'ON' ? 'bg-red-500 text-white' : (isset($icloudStatus[$item['imei2']]) && $icloudStatus[$item['imei2']]['status'] == 'OFF' ? 'bg-emerald-500 text-white' : 'bg-zinc-100 text-zinc-700') }}">
+                                            <button wire:click="checkIcloud('{{ $item['imei2'] }}')" wire:loading.attr="disabled"
+                                                class="flex-1 py-2.5 rounded-xl text-[10px] font-bold transition-all {{ isset($icloudStatus[$item['imei2']]) && $icloudStatus[$item['imei2']]['status'] == 'ON' ? 'bg-red-500 text-white' : (isset($icloudStatus[$item['imei2']]) && $icloudStatus[$item['imei2']]['status'] == 'OFF' ? 'bg-emerald-500 text-white' : 'bg-zinc-100 text-zinc-700') }}">
                                                 {{ $icloudStatus[$item['imei2']]['status'] ?? 'CHECK 2' }}
                                             </button>
                                             @if ($viewMode == 'card')
-                                                <button wire:click="openCard('{{ $item['imei1'] }}', '{{ $item['imei2'] }}')" class="px-4 py-2.5 bg-blue-500 text-white rounded-xl font-bold text-[10px]">CARD</button>
+                                                <button wire:click="openCard('{{ $item['imei1'] }}', '{{ $item['imei2'] }}')"
+                                                    class="px-4 py-2.5 bg-blue-500 text-white rounded-xl font-bold text-[10px]">CARD</button>
                                             @endif
                                         </div>
                                     </div>
@@ -164,14 +187,17 @@
                                         </div>
                                     </div>
                                     <div class="flex gap-2">
-                                        <button wire:click="checkIcloud('{{ $pair[0] }}')" wire:loading.attr="disabled" class="flex-1 py-2.5 rounded-xl text-[10px] font-bold transition-all {{ isset($icloudStatus[$pair[0]]) && $icloudStatus[$pair[0]]['status'] == 'ON' ? 'bg-red-500 text-white' : (isset($icloudStatus[$pair[0]]) && $icloudStatus[$pair[0]]['status'] == 'OFF' ? 'bg-emerald-500 text-white' : 'bg-zinc-100 text-zinc-700') }}">
+                                        <button wire:click="checkIcloud('{{ $pair[0] }}')" wire:loading.attr="disabled"
+                                            class="flex-1 py-2.5 rounded-xl text-[10px] font-bold transition-all {{ isset($icloudStatus[$pair[0]]) && $icloudStatus[$pair[0]]['status'] == 'ON' ? 'bg-red-500 text-white' : (isset($icloudStatus[$pair[0]]) && $icloudStatus[$pair[0]]['status'] == 'OFF' ? 'bg-emerald-500 text-white' : 'bg-zinc-100 text-zinc-700') }}">
                                             {{ $icloudStatus[$pair[0]]['status'] ?? 'CHECK A' }}
                                         </button>
-                                        <button wire:click="checkIcloud('{{ $pair[1] }}')" wire:loading.attr="disabled" class="flex-1 py-2.5 rounded-xl text-[10px] font-bold transition-all {{ isset($icloudStatus[$pair[1]]) && $icloudStatus[$pair[1]]['status'] == 'ON' ? 'bg-red-500 text-white' : (isset($icloudStatus[$pair[1]]) && $icloudStatus[$pair[1]]['status'] == 'OFF' ? 'bg-emerald-500 text-white' : 'bg-zinc-100 text-zinc-700') }}">
+                                        <button wire:click="checkIcloud('{{ $pair[1] }}')" wire:loading.attr="disabled"
+                                            class="flex-1 py-2.5 rounded-xl text-[10px] font-bold transition-all {{ isset($icloudStatus[$pair[1]]) && $icloudStatus[$pair[1]]['status'] == 'ON' ? 'bg-red-500 text-white' : (isset($icloudStatus[$pair[1]]) && $icloudStatus[$pair[1]]['status'] == 'OFF' ? 'bg-emerald-500 text-white' : 'bg-zinc-100 text-zinc-700') }}">
                                             {{ $icloudStatus[$pair[1]]['status'] ?? 'CHECK B' }}
                                         </button>
                                         @if ($viewMode == 'card')
-                                            <button wire:click="openCard('{{ $pair[0] }}', '{{ $pair[1] }}')" class="px-4 py-2.5 bg-orange-500 text-white rounded-xl font-bold text-[10px]">CARD</button>
+                                            <button wire:click="openCard('{{ $pair[0] }}', '{{ $pair[1] }}')"
+                                                class="px-4 py-2.5 bg-orange-500 text-white rounded-xl font-bold text-[10px]">CARD</button>
                                         @endif
                                     </div>
                                 </div>
@@ -185,7 +211,8 @@
                             <div class="bg-white p-4 rounded-2xl shadow-sm border border-zinc-200">
                                 <div class="mb-4 font-mono text-xs font-black text-zinc-900">{{ $leftoverSingle }}</div>
                                 <div class="flex gap-2">
-                                    <button wire:click="checkIcloud('{{ $leftoverSingle }}')" wire:loading.attr="disabled" class="flex-1 py-2.5 rounded-xl text-[10px] font-bold transition-all {{ isset($icloudStatus[$leftoverSingle]) && $icloudStatus[$leftoverSingle]['status'] == 'ON' ? 'bg-red-500 text-white' : (isset($icloudStatus[$leftoverSingle]) && $icloudStatus[$leftoverSingle]['status'] == 'OFF' ? 'bg-emerald-500 text-white' : 'bg-zinc-100 text-zinc-700') }}">
+                                    <button wire:click="checkIcloud('{{ $leftoverSingle }}')" wire:loading.attr="disabled"
+                                        class="flex-1 py-2.5 rounded-xl text-[10px] font-bold transition-all {{ isset($icloudStatus[$leftoverSingle]) && $icloudStatus[$leftoverSingle]['status'] == 'ON' ? 'bg-red-500 text-white' : (isset($icloudStatus[$leftoverSingle]) && $icloudStatus[$leftoverSingle]['status'] == 'OFF' ? 'bg-emerald-500 text-white' : 'bg-zinc-100 text-zinc-700') }}">
                                         {{ $icloudStatus[$leftoverSingle]['status'] ?? 'CHECK SINGLE' }}
                                     </button>
                                 </div>
@@ -198,13 +225,16 @@
     </div>
 
     @if ($showModal && $selectedItem)
-        <div class="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4 overflow-y-auto">
+        <div
+            class="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4 overflow-y-auto">
             <div class="relative w-full max-w-sm my-auto flex flex-col items-center">
                 <div class="flex gap-3 mb-6">
-                    <button onclick="downloadCardPng()" class="flex items-center gap-2 px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-full font-bold text-sm shadow-lg transition-transform active:scale-95">
+                    <button onclick="downloadCardPng()"
+                        class="flex items-center gap-2 px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-full font-bold text-sm shadow-lg transition-transform active:scale-95">
                         <span class="mdi mdi-download"></span> Download PNG
                     </button>
-                    <button wire:click="closeModal" class="px-6 py-3 bg-white/10 hover:bg-white/20 text-white rounded-full font-bold text-sm transition-colors">Close</button>
+                    <button wire:click="closeModal"
+                        class="px-6 py-3 bg-white/10 hover:bg-white/20 text-white rounded-full font-bold text-sm transition-colors">Close</button>
                 </div>
                 <div id="capture-area" class="flex justify-center items-center p-4">
                     @if ($selectedItem['deviceModel'] == 'iphone14')
@@ -237,55 +267,75 @@
             btn.classList.add('opacity-75', 'cursor-wait');
 
             try {
-                // Fetch data dari Livewire
-                const data = (type === 'double') ? await @this.getDoubleDataForZip() : await @this.getSingleDataForZip();
+                // 1. Get Total Count first
+                let totalCount = 0;
+                if (type === 'double') {
+                    totalCount = await @this.getTotalDoubleCount();
+                } else {
+                    totalCount = await @this.getTotalSingleCount();
+                }
 
-                if (data.length === 0) {
+                if (totalCount === 0) {
                     alert('Tidak ada data.');
                     restoreButtons();
                     return;
                 }
 
-                // LOOPING DENGAN DELAY & CLEANUP MEMORI (Fixing Crash)
-                for (let i = 0; i < data.length; i++) {
-                    btn.innerHTML = `<span class="mdi mdi-loading mdi-spin"></span> ${i + 1}/${data.length}`;
+                // 2. Chunk processing
+                const chunkSize = 50;
+                let processedCount = 0;
 
-                    // 1. Render HTML ke DOM
-                    tempArea.innerHTML = data[i].html;
-                    
-                    // 2. Init Barcode
-                    const barcodes = tempArea.querySelectorAll(".barcode-svg");
-                    barcodes.forEach(el => {
-                        if (el.getAttribute('data-value')) JsBarcode(el).init();
-                    });
+                for (let skip = 0; skip < totalCount; skip += chunkSize) {
+                    // Update Status "Fetching..."
+                    btn.innerHTML = `<span class="mdi mdi-loading mdi-spin"></span> Fetching ${skip + 1}-${Math.min(skip + chunkSize, totalCount)}...`;
 
-                    // 3. Jeda sedikit untuk rendering font
-                    await new Promise(r => setTimeout(r, 100));
+                    // Fetch Chunk Data from Livewire
+                    const data = (type === 'double')
+                        ? await @this.getDoubleDataForZip(skip, chunkSize)
+                        : await @this.getSingleDataForZip(skip, chunkSize);
 
-                    // 4. Generate Canvas
-                    const canvas = await html2canvas(tempArea.firstChild, {
-                        scale: 2,
-                        useCORS: true,
-                        logging: false,
-                        backgroundColor: null,
-                        removeContainer: true 
-                    });
+                    // Process each item in the chunk
+                    for (let i = 0; i < data.length; i++) {
+                        processedCount++;
+                        btn.innerHTML = `<span class="mdi mdi-loading mdi-spin"></span> Processing ${processedCount}/${totalCount}`;
 
-                    // 5. Simpan ke ZIP sebagai Blob
-                    const blob = await new Promise(res => canvas.toBlob(res, 'image/png', 0.8));
-                    zip.file(`${type.toUpperCase()}_${data[i].imei1}.png`, blob);
+                        // Render HTML to DOM
+                        tempArea.innerHTML = data[i].html;
 
-                    // 6. PENTING: Cleanup Memory secara eksplisit!
-                    canvas.remove(); // Hapus canvas dari memory
-                    tempArea.innerHTML = ''; // Kosongkan DOM holder
-                    
-                    // 7. Jeda Wajib agar Browser Garbage Collector bekerja (Mencegah Crash)
-                    await new Promise(r => setTimeout(r, 150)); 
+                        // Init Barcode
+                        const barcodes = tempArea.querySelectorAll(".barcode-svg");
+                        barcodes.forEach(el => {
+                            if (el.getAttribute('data-value')) JsBarcode(el).init();
+                        });
+
+                        // Small delay for rendering
+                        await new Promise(r => setTimeout(r, 50));
+
+                        // Generate Canvas
+                        const canvas = await html2canvas(tempArea.firstChild, {
+                            scale: 2,
+                            useCORS: true,
+                            logging: false,
+                            backgroundColor: null,
+                            removeContainer: true
+                        });
+
+                        // Save to ZIP
+                        const blob = await new Promise(res => canvas.toBlob(res, 'image/png', 0.8));
+                        zip.file(`${type.toUpperCase()}_${data[i].imei1}.png`, blob);
+
+                        // Cleanup Memory
+                        canvas.remove();
+                        tempArea.innerHTML = '';
+
+                        // Garbage Collection Pause
+                        await new Promise(r => setTimeout(r, 100));
+                    }
                 }
 
                 btn.innerHTML = `<span class="mdi mdi-loading mdi-spin"></span> Compressing...`;
                 const content = await zip.generateAsync({ type: "blob" });
-                saveAs(content, `${data.length} IMEI ${type.toUpperCase()}.zip`);
+                saveAs(content, `${totalCount} IMEI ${type.toUpperCase()}.zip`);
 
             } catch (e) {
                 console.error(e);
@@ -320,7 +370,7 @@
                     }
                 }
             }).then(canvas => {
-                canvas.toBlob(function(blob) { saveAs(blob, `iPhone-Mockup-${Date.now()}.png`); });
+                canvas.toBlob(function (blob) { saveAs(blob, `iPhone-Mockup-${Date.now()}.png`); });
             }).catch(err => { console.error(err); alert("Gagal membuat gambar."); });
         }
 
